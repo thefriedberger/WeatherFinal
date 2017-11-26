@@ -1,120 +1,3 @@
-<!doctype html>
-<html>
-<head>
-	<title>Weather</title>
-<link rel="stylesheet" type="text/css" href="style.css" />
-<link rel="stylesheet" type="text/css" href="button.css" />
-</head>
-<body>
-<div class="frame">
-	<div id="toggleBox">
-		<div class="thingy noAnimation" id="top"></div>
-		<div class="thingy noAnimation" id="middle"></div>
-		<div class="thingy noAnimation" id="bottom"></div>
-	</div>
-	<div class="hidden nav" id="nav">
-		<span class="navElement" id="element1">About</span>
-		<span class="navElement" id="element2">Meteorites</span>
-		<span class="navElement" id="element3">Nothing</span>
-	</div>
-	</div>
-	<div class="wrapper">
-		<div class="card noAnimation" id="card">
-			<div class="front">
-			<span class="banner bar"><div id="location"></div></span>
-				<span class="dateBar bar"><div id="date"></div></span>
-				<span class="tempBar bar"><div id="temp"></div></span>
-				<span class="windBar bar"><div id="wind">
-					<div id="chill"></div>
-					<div id="speed"></div>
-				</div></span>
-			</div>
-			<div class="back">
-				<div class="slot" id="day1">
-					<div class="animation">
-						<div class="layer1"></div>
-						<div class="layer2"></div>
-						<div class="layer3"></div>
-						<div class="layer4"></div>
-						<div class="layer5"></div>
-						<div class="layer6"></div>
-						<div class="layer7"></div>
-						<div class="layer8"></div>
-						<div class="layer9"></div>
-					</div>
-					<div class="day"></div>
-					<div class="high"></div>
-					<div class="low"></div>
-				</div>
-				<div class="slot" id="day2">
-					<div class="animation">
-						<div class="layer1"></div>
-						<div class="layer2"></div>
-						<div class="layer3"></div>
-						<div class="layer4"></div>
-						<div class="layer5"></div>
-						<div class="layer6"></div>
-						<div class="layer7"></div>
-						<div class="layer8"></div>
-						<div class="layer9"></div>
-					</div>
-					<div class="day"></div>
-					<div class="high"></div>
-					<div class="low"></div>
-				</div>
-				<div class="slot" id="day3">
-					<div class="animation">
-						<div class="layer1"></div>
-						<div class="layer2"></div>
-						<div class="layer3"></div>
-						<div class="layer4"></div>
-						<div class="layer5"></div>
-						<div class="layer6"></div>
-						<div class="layer7"></div>
-						<div class="layer8"></div>
-						<div class="layer9"></div>
-					</div>
-					<div class="day"></div>
-					<div class="high"></div>
-					<div class="low"></div>
-				</div>
-				<div class="slot" id="day4">
-					<div class="animation">
-						<div class="layer1"></div>
-						<div class="layer2"></div>
-						<div class="layer3"></div>
-						<div class="layer4"></div>
-						<div class="layer5"></div>
-						<div class="layer6"></div>
-						<div class="layer7"></div>
-						<div class="layer8"></div>
-						<div class="layer9"></div>
-					</div>
-					<div class="day"></div>
-					<div class="high"></div>
-					<div class="low"></div>
-				</div>
-				<div class="slot" id="day5">
-					<div class="animation">
-						<div class="layer1"></div>
-						<div class="layer2"></div>
-						<div class="layer3"></div>
-						<div class="layer4"></div>
-						<div class="layer5"></div>
-						<div class="layer6"></div>
-						<div class="layer7"></div>
-						<div class="layer8"></div>
-						<div class="layer9"></div>
-					</div>
-					<div class="day"></div>
-					<div class="high"></div>
-					<div class="low"></div>
-				</div>
-			</div>
-		</div>
-	</div>
-</div>
-<script>
 
 var options = {
   enableHighAccuracy: true,
@@ -313,33 +196,19 @@ function animate() {
 	var topBar = document.getElementById("top");
 	var middleBar = document.getElementById("middle");
 	var bottomBar = document.getElementById("bottom");
-	var nav = document.getElementById('nav');
 	
-	if (topBar.className == "thingy noAnimation") {
-		topBar.classList.add("topMoveForward");
-		middleBar.classList.add("middleMoveForward");
-		bottomBar.classList.add("bottomMoveForward");
-		topBar.classList.remove("noAnimation");
-		middleBar.classList.remove("noAnimation");
-		bottomBar.classList.remove("noAnimation");
-		
-		nav.classList.remove('hidden');
-		nav.classList.add('animate');
+	if (topBar.className == "bar noAnimation") {
+		topBar.className = "bar topMoveForward";
+		middleBar.className = "bar middleMoveForward";
+		bottomBar.className = "bar bottomMoveForward";
 	} else {
-		topBar.classList.add("topMoveBack");
-		middleBar.classList.add("middleMoveBack");
-		bottomBar.classList.add("bottomMoveBack");
-		topBar.classList.remove("topMoveForward");
-		middleBar.classList.remove("middleMoveForward");
-		bottomBar.classList.remove("bottomMoveForward");
-		nav.classList.remove('animate');
-		nav.classList.add('hideNav');
+		topBar.className = "bar topMoveBack";
+		middleBar.className = "bar middleMoveBack";
+		bottomBar.className = "bar bottomMoveBack";
 		setTimeout(function() {
-			topBar.className = "thingy noAnimation";
-			middleBar.className = "thingy noAnimation";
-			bottomBar.className = "thingy noAnimation";
-			nav.classList.remove('hideNav');
-			nav.classList.add('hidden');
+			topBar.className = "bar noAnimation";
+			middleBar.className = "bar noAnimation";
+			bottomBar.className = "bar noAnimation";
 		},1500);
 	}
 }
@@ -356,6 +225,3 @@ function flip() {
 		},1500);
 	}
 }
-</script>
-</body>
-</html>

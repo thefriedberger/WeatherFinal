@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+<head>
+	<title>Meteorie Landings</title>
+
+</head>
+<body>
+<div class="wrapper">
+
+</div>
+<script>
+var options = {
+  enableHighAccuracy: true,
+  timeout: 5000,
+  maximumAge: 0
+}
+function success(pos) {
+	var crd = pos.coords;
+	var lat = crd.latitude;
+	var lon = crd.longitude;
+	findMeteorites(lat, lon);
+}
+
+function error(er) {
+	
+}
+
+navigator.geolocation.getCurrentPosition(success, error, options);
+
+var data;
+var xhttp = new XMLHttpRequest
+xhttp.addEventListener("load", findMeteorites);
+xhttp.open("GET", "https://data.nasa.gov/resource/y77d-th95.json");
+xhttp.send();
+ 
+function findMeteorites(lat1, lon1) {
+	data = JSON.parse(xhttp.responseText);
+	console.log(data);
+	//console.log(lat1);
+	//console.log(lon1);
+	
+	for (var i = 0; i < data.length; i++) {
+		//for(var j = 0; j < 100; j++) {
+			if(data[i].hasOwnProperty('geolocation')) {
+				lon2 = data[i].geolocation.coordinates[0];
+				lat2 = data[i].geolocation.coordinates[1];
+
+				var R = 3958.7558657440545; // Radius of earth in Miles 
+				var dLat = toRad(lat2-lat1);
+				var dLon = toRad(lon2-lon1); 
+				var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+					Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * 
+					Math.sin(dLon/2) * Math.sin(dLon/2); 
+				var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+				var d = R * c;
+				
+				if(d<250) {
+					d = Math.floor(d);
+					console.log("Meteorite landing " + d + " miles away");
+		
+				}
+			}
+			//console.log(lat2);
+			//console.log(lon2);
+
+		
+	}
+	
+}
+function toRad(Value) {
+    /** Converts numeric degrees to radians */
+    return Value * Math.PI / 180;
+}
+</script>
+</body>
+</html>

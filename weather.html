@@ -3,15 +3,17 @@
 <head>
 	<title>Weather</title>
 <link rel="stylesheet" type="text/css" href="style.css" />
+<link rel="stylesheet" type="text/css" href="navStyle.css" />
 </head>
 <body>
-<span id="topBar">Weather</span>
-<div class="frame">
+<span id="topBar">Weather
 	<div id="toggleBox">
 		<div class="thingy noAnimation" id="top"></div>
 		<div class="thingy noAnimation" id="middle"></div>
 		<div class="thingy noAnimation" id="bottom"></div>
 	</div>
+</span>
+<div class="frame">
 	<div class="hidden nav" id="nav">
 		<a href=""><span class="navElement" id="element1">About</span></a>
 		<a href="meteorite.html"><span class="navElement" id="element2">Meteorites</span></a>
@@ -158,7 +160,6 @@ function getLocationName(lat, lon) {
 }
 function findLocation() {
 	currentLocation = JSON.parse(geo.responseText);
-	console.log(currentLocation);
 	var location =  currentLocation.results[0].locations[0].adminArea5 + ', ' + currentLocation.results[0].locations[0].adminArea3;
 	return location;
 }
@@ -166,8 +167,6 @@ var currentWeather;
 
 function parseWeather() {
 	currentWeather = JSON.parse(xhttp1.responseText);
-	
-	return currentWeather;
 }
 function getWeather(e) {
 	console.log(currentWeather); //use as a reference to look into api

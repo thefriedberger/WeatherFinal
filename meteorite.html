@@ -3,30 +3,40 @@
 <head>
 	<title>Meteorite Landings</title>
 <link rel="stylesheet" type="text/css" href="style.css" />
+<link rel="stylesheet" type="text/css" href="navStyle.css" />
 </head>
 <body>
-<span id="topBar">Meteorite</span>
-<div class="frame">
+<span id="topBar">Meteorite
 	<div id="toggleBox">
 		<div class="thingy noAnimation" id="top"></div>
 		<div class="thingy noAnimation" id="middle"></div>
 		<div class="thingy noAnimation" id="bottom"></div>
 	</div>
+</span>
+<div class="frame">
 	<div class="hidden nav" id="nav">
 		<a href=""><span class="navElement" id="element1">About</span></a>
 		<a href="weather.html"><span class="navElement" id="element2">Weather</span></a>
 	</div>
 </div>
-<div class="wrapper">
-	<div class="select">
+<div class="container">
+	<div class="rangeBox">
 		<select id="select" onchange="findRange(this.value)">
 			<option value="">Select a range</option>
 			<option value=100>100 Miles</option>
 			<option value=250>250 Miles</option>
 			<option value=500>500 Miles</option>
 		</select>
-		<button type='button' onclick='findMeteorites()'>Submit</button>
+		<button class="button" type='button' onclick='findMeteorites()'>Submit</button>
 	</div>
+	<table id='table'>
+		<tr>
+			<th>Name</th>
+			<th>Mass</th>
+			<th>Year</th>
+			<th>Distance</th>
+		</tr>
+	</table>
 </div>
 <script>
 var options = {
@@ -57,14 +67,11 @@ xhttp.send();
 
 function parseMeteorites() {
 	data = JSON.parse(xhttp.responseText);
-	
-	return data;
 }
 var range
 
 function findRange() {
 	range = document.getElementById('select').value;
-	return range;
 }
 
 function findMeteorites() {
@@ -83,11 +90,14 @@ function findMeteorites() {
 				Math.sin(dLon/2) * Math.sin(dLon/2); 
 			var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
 			var d = R * c;
+			var table = document.getElementById('table');
 			
 			if(d < range) {
 				d = Math.floor(d);
 				var date = data[i].year.substring(0,4);
 				console.log("The " + data[i].name + " Meteorite landed " + d + " miles away in " + date);
+				
+				table.appendChild(createRow(data[i].name,data[i].mass,date,d));
 			}
 		}
 	}
@@ -96,6 +106,23 @@ function findMeteorites() {
 function toRad(Value) {
     /** Converts numeric degrees to radians */
     return Value * Math.PI / 180;
+}
+
+function createRow(name, mass, year, distance){
+	var tr = document.createElement('tr');
+	var td = [  document.createElement('td'),
+				document.createElement('td'),
+				document.createElement('td'),
+				document.createElement('td') ];
+	td[0].innerHTML = name;
+	td[1].innerHTML = mass;
+	td[2].innerHTML = year;
+	td[3].innerHTML= distance;
+	
+	for (var i = 0; i < td.length; i++) {
+		tr.appendChild(td[i]);
+	}
+	return tr;
 }
 
 var theButton = document.getElementById("toggleBox");

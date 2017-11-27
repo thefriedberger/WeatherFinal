@@ -1,12 +1,32 @@
 <!doctype html>
 <html>
 <head>
-	<title>Meteorie Landings</title>
-
+	<title>Meteorite Landings</title>
+<link rel="stylesheet" type="text/css" href="style.css" />
 </head>
 <body>
+<span id="topBar">Meteorite</span>
+<div class="frame">
+	<div id="toggleBox">
+		<div class="thingy noAnimation" id="top"></div>
+		<div class="thingy noAnimation" id="middle"></div>
+		<div class="thingy noAnimation" id="bottom"></div>
+	</div>
+	<div class="hidden nav" id="nav">
+		<a href=""><span class="navElement" id="element1">About</span></a>
+		<a href="weather.html"><span class="navElement" id="element2">Weather</span></a>
+	</div>
+</div>
 <div class="wrapper">
-
+	<div class="select">
+		<select id="select" onchange="findRange(this.value)">
+			<option value="">Select a range</option>
+			<option value=100>100 Miles</option>
+			<option value=250>250 Miles</option>
+			<option value=500>500 Miles</option>
+		</select>
+		<button type='button' onclick='findMeteorites()'>Submit</button>
+	</div>
 </div>
 <script>
 var options = {
@@ -14,11 +34,13 @@ var options = {
   timeout: 5000,
   maximumAge: 0
 }
+var lat1;
+var lon1;
 function success(pos) {
 	var crd = pos.coords;
-	var lat = crd.latitude;
-	var lon = crd.longitude;
-	findMeteorites(lat, lon);
+	lat1 = crd.latitude;
+	lon1 = crd.longitude;
+	findMeteorites();
 }
 
 function error(er) {
@@ -29,47 +51,93 @@ navigator.geolocation.getCurrentPosition(success, error, options);
 
 var data;
 var xhttp = new XMLHttpRequest
-xhttp.addEventListener("load", findMeteorites);
+xhttp.addEventListener("load", parseMeteorites);
 xhttp.open("GET", "https://data.nasa.gov/resource/y77d-th95.json");
 xhttp.send();
- 
-function findMeteorites(lat1, lon1) {
+
+function parseMeteorites() {
 	data = JSON.parse(xhttp.responseText);
-	console.log(data);
-	//console.log(lat1);
-	//console.log(lon1);
+	
+	return data;
+}
+var range
+
+function findRange() {
+	range = document.getElementById('select').value;
+	return range;
+}
+
+function findMeteorites() {
+	console.log(data);	
 	
 	for (var i = 0; i < data.length; i++) {
-		//for(var j = 0; j < 100; j++) {
-			if(data[i].hasOwnProperty('geolocation')) {
-				lon2 = data[i].geolocation.coordinates[0];
-				lat2 = data[i].geolocation.coordinates[1];
+		if(data[i].hasOwnProperty('geolocation')) {
+			lon2 = data[i].geolocation.coordinates[0];
+			lat2 = data[i].geolocation.coordinates[1];
 
-				var R = 3958.7558657440545; // Radius of earth in Miles 
-				var dLat = toRad(lat2-lat1);
-				var dLon = toRad(lon2-lon1); 
-				var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-					Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * 
-					Math.sin(dLon/2) * Math.sin(dLon/2); 
-				var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-				var d = R * c;
-				
-				if(d<250) {
-					d = Math.floor(d);
-					console.log("Meteorite landing " + d + " miles away");
-		
-				}
+			var R = 3958.7558657440545; // Radius of earth in Miles 
+			var dLat = toRad(lat2-lat1);
+			var dLon = toRad(lon2-lon1); 
+			var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+				Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * 
+				Math.sin(dLon/2) * Math.sin(dLon/2); 
+			var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+			var d = R * c;
+			
+			if(d < range) {
+				d = Math.floor(d);
+				var date = data[i].year.substring(0,4);
+				console.log("The " + data[i].name + " Meteorite landed " + d + " miles away in " + date);
 			}
-			//console.log(lat2);
-			//console.log(lon2);
-
-		
+		}
 	}
 	
 }
 function toRad(Value) {
     /** Converts numeric degrees to radians */
     return Value * Math.PI / 180;
+}
+
+var theButton = document.getElementById("toggleBox");
+theButton.addEventListener("click", animate);
+
+function animate() {
+	var topBar = document.getElementById("top");
+	var middleBar = document.getElementById("middle");
+	var bottomBar = document.getElementById("bottom");
+	var nav = document.getElementById('nav');
+	
+	if (topBar.className == "thingy noAnimation") {
+		topBar.classList.add("topMoveForward");
+		middleBar.classList.add("middleMoveForward");
+		bottomBar.classList.add("bottomMoveForward");
+		
+		topBar.classList.remove("noAnimation");
+		middleBar.classList.remove("noAnimation");
+		bottomBar.classList.remove("noAnimation");
+		
+		nav.classList.remove('hidden');
+		nav.classList.add('animate');
+	} else {
+		topBar.classList.add("topMoveBack");
+		middleBar.classList.add("middleMoveBack");
+		bottomBar.classList.add("bottomMoveBack");
+		
+		topBar.classList.remove("topMoveForward");
+		middleBar.classList.remove("middleMoveForward");
+		bottomBar.classList.remove("bottomMoveForward");
+		
+		nav.classList.remove('animate');
+		nav.classList.add('hideNav');
+		
+		setTimeout(function() {
+			topBar.className = "thingy noAnimation";
+			middleBar.className = "thingy noAnimation";
+			bottomBar.className = "thingy noAnimation";
+			nav.classList.remove('hideNav');
+			nav.classList.add('hidden');
+		},1500);
+	}
 }
 </script>
 </body>

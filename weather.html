@@ -3,9 +3,9 @@
 <head>
 	<title>Weather</title>
 <link rel="stylesheet" type="text/css" href="style.css" />
-<link rel="stylesheet" type="text/css" href="button.css" />
 </head>
 <body>
+<span id="topBar">Weather</span>
 <div class="frame">
 	<div id="toggleBox">
 		<div class="thingy noAnimation" id="top"></div>
@@ -13,103 +13,102 @@
 		<div class="thingy noAnimation" id="bottom"></div>
 	</div>
 	<div class="hidden nav" id="nav">
-		<span class="navElement" id="element1">About</span>
-		<span class="navElement" id="element2">Meteorites</span>
-		<span class="navElement" id="element3">Nothing</span>
+		<a href=""><span class="navElement" id="element1">About</span></a>
+		<a href="meteorite.html"><span class="navElement" id="element2">Meteorites</span></a>
 	</div>
-	</div>
-	<div class="wrapper">
-		<div class="card noAnimation" id="card">
-			<div class="front">
-			<span class="banner bar"><div id="location"></div></span>
-				<span class="dateBar bar"><div id="date"></div></span>
-				<span class="tempBar bar"><div id="temp"></div></span>
-				<span class="windBar bar"><div id="wind">
-					<div id="chill"></div>
-					<div id="speed"></div>
-				</div></span>
+</div>
+<div class="wrapper">
+	<div class="card noAnimation" id="card">
+		<div class="front">
+		<span class="banner bar"><div id="location"></div></span>
+			<span class="dateBar bar"><div id="date"></div></span>
+			<span class="tempBar bar"><div id="temp"></div></span>
+			<span class="windBar bar"><div id="wind">
+				<div id="chill"></div>
+				<div id="speed"></div>
+			</div></span>
+				<div id="weather"></div>
+		</div>
+		<div class="back">
+			<div class="slot" id="day1">
+				<div class="animation">
+					<div class="layer1"></div>
+					<div class="layer2"></div>
+					<div class="layer3"></div>
+					<div class="layer4"></div>
+					<div class="layer5"></div>
+					<div class="layer6"></div>
+					<div class="layer7"></div>
+					<div class="layer8"></div>
+					<div class="layer9"></div>
+				</div>
+				<div class="day"></div>
+				<div class="high"></div>
+				<div class="low"></div>
 			</div>
-			<div class="back">
-				<div class="slot" id="day1">
-					<div class="animation">
-						<div class="layer1"></div>
-						<div class="layer2"></div>
-						<div class="layer3"></div>
-						<div class="layer4"></div>
-						<div class="layer5"></div>
-						<div class="layer6"></div>
-						<div class="layer7"></div>
-						<div class="layer8"></div>
-						<div class="layer9"></div>
-					</div>
-					<div class="day"></div>
-					<div class="high"></div>
-					<div class="low"></div>
+			<div class="slot" id="day2">
+				<div class="animation">
+					<div class="layer1"></div>
+					<div class="layer2"></div>
+					<div class="layer3"></div>
+					<div class="layer4"></div>
+					<div class="layer5"></div>
+					<div class="layer6"></div>
+					<div class="layer7"></div>
+					<div class="layer8"></div>
+					<div class="layer9"></div>
 				</div>
-				<div class="slot" id="day2">
-					<div class="animation">
-						<div class="layer1"></div>
-						<div class="layer2"></div>
-						<div class="layer3"></div>
-						<div class="layer4"></div>
-						<div class="layer5"></div>
-						<div class="layer6"></div>
-						<div class="layer7"></div>
-						<div class="layer8"></div>
-						<div class="layer9"></div>
-					</div>
-					<div class="day"></div>
-					<div class="high"></div>
-					<div class="low"></div>
+				<div class="day"></div>
+				<div class="high"></div>
+				<div class="low"></div>
+			</div>
+			<div class="slot" id="day3">
+				<div class="animation">
+					<div class="layer1"></div>
+					<div class="layer2"></div>
+					<div class="layer3"></div>
+					<div class="layer4"></div>
+					<div class="layer5"></div>
+					<div class="layer6"></div>
+					<div class="layer7"></div>
+					<div class="layer8"></div>
+					<div class="layer9"></div>
 				</div>
-				<div class="slot" id="day3">
-					<div class="animation">
-						<div class="layer1"></div>
-						<div class="layer2"></div>
-						<div class="layer3"></div>
-						<div class="layer4"></div>
-						<div class="layer5"></div>
-						<div class="layer6"></div>
-						<div class="layer7"></div>
-						<div class="layer8"></div>
-						<div class="layer9"></div>
-					</div>
-					<div class="day"></div>
-					<div class="high"></div>
-					<div class="low"></div>
+				<div class="day"></div>
+				<div class="high"></div>
+				<div class="low"></div>
+			</div>
+			<div class="slot" id="day4">
+				<div class="animation">
+					<div class="layer1"></div>
+					<div class="layer2"></div>
+					<div class="layer3"></div>
+					<div class="layer4"></div>
+					<div class="layer5"></div>
+					<div class="layer6"></div>
+					<div class="layer7"></div>
+					<div class="layer8"></div>
+					<div class="layer9"></div>
 				</div>
-				<div class="slot" id="day4">
-					<div class="animation">
-						<div class="layer1"></div>
-						<div class="layer2"></div>
-						<div class="layer3"></div>
-						<div class="layer4"></div>
-						<div class="layer5"></div>
-						<div class="layer6"></div>
-						<div class="layer7"></div>
-						<div class="layer8"></div>
-						<div class="layer9"></div>
-					</div>
-					<div class="day"></div>
-					<div class="high"></div>
-					<div class="low"></div>
+				<div class="day"></div>
+				<div class="high"></div>
+				<div class="low"></div>
+			</div>
+			<div class="slot" id="day5">
+				<div class="animation">
+					<div class="layer1"></div>
+					<div class="layer2"></div>
+					<div class="layer3"></div>
+					<div class="layer4"></div>
+					<div class="layer5"></div>
+					<div class="layer6"></div>
+					<div class="layer7"></div>
+					<div class="layer8"></div>
+					<div class="layer9"></div>
 				</div>
-				<div class="slot" id="day5">
-					<div class="animation">
-						<div class="layer1"></div>
-						<div class="layer2"></div>
-						<div class="layer3"></div>
-						<div class="layer4"></div>
-						<div class="layer5"></div>
-						<div class="layer6"></div>
-						<div class="layer7"></div>
-						<div class="layer8"></div>
-						<div class="layer9"></div>
-					</div>
-					<div class="day"></div>
-					<div class="high"></div>
-					<div class="low"></div>
-				</div>
+				<div class="day"></div>
+				<div class="high"></div>
+				<div class="low"></div>
 			</div>
 		</div>
 	</div>
@@ -143,7 +142,7 @@ var xhttp1;//for getting current location weathe
 function getLocationCurrent(lat, lon){
 	var data;
 	xhttp1 = new XMLHttpRequest();
-	xhttp1.addEventListener("load", getWeather);
+	xhttp1.addEventListener("load", parseWeather);
 	xhttp1.open("GET", "http://api.openweathermap.org/data/2.5/weather?lat="+lat+"&lon="+lon+"&APPID=29bb226f726114879207742f5261bfad");
 	xhttp1.send();
 }
@@ -163,9 +162,14 @@ function findLocation() {
 	var location =  currentLocation.results[0].locations[0].adminArea5 + ', ' + currentLocation.results[0].locations[0].adminArea3;
 	return location;
 }
+var currentWeather;
 
-function getWeather(e) {
+function parseWeather() {
 	currentWeather = JSON.parse(xhttp1.responseText);
+	
+	return currentWeather;
+}
+function getWeather(e) {
 	console.log(currentWeather); //use as a reference to look into api
 	
 	
@@ -182,8 +186,11 @@ function getWeather(e) {
 	
 	//finds current wind speed and displays it
 	var windSpeed = document.getElementById("speed");
-	windSpeed.innerHTML = currentWeather.wind.speed;
+	var speed = currentWeather.wind.speed
+	windSpeed.innerHTML = Math.ceil(speed);
 	
+	var weather = document.getElementById('weather');
+	weather.innerHTML = "Looks like " + currentWeather.weather[0].description;
 	//finds wind chill and displays
 	/*
 	var currentWindChill = channel.wind.chill;
@@ -252,7 +259,7 @@ function getForecast() {
 		}
 		
 		//get the high temperatures for each day, put them in
-		var highTemp = Math.floor((list[i].main.temp_max * (9/5)) - 459.67);
+		var highTemp = Math.ceil((list[i].main.temp_max * (9/5)) - 459.67);
 		var high = document.getElementsByClassName("high");
 		high[i].innerHTML += highTemp + '&#176';
 		
@@ -319,6 +326,7 @@ function animate() {
 		topBar.classList.add("topMoveForward");
 		middleBar.classList.add("middleMoveForward");
 		bottomBar.classList.add("bottomMoveForward");
+		
 		topBar.classList.remove("noAnimation");
 		middleBar.classList.remove("noAnimation");
 		bottomBar.classList.remove("noAnimation");
@@ -329,11 +337,14 @@ function animate() {
 		topBar.classList.add("topMoveBack");
 		middleBar.classList.add("middleMoveBack");
 		bottomBar.classList.add("bottomMoveBack");
+		
 		topBar.classList.remove("topMoveForward");
 		middleBar.classList.remove("middleMoveForward");
 		bottomBar.classList.remove("bottomMoveForward");
+		
 		nav.classList.remove('animate');
 		nav.classList.add('hideNav');
+		
 		setTimeout(function() {
 			topBar.className = "thingy noAnimation";
 			middleBar.className = "thingy noAnimation";

@@ -171,7 +171,6 @@ function parseWeather() {
 function getWeather(e) {
 	console.log(currentWeather); //use as a reference to look into api
 	
-	
 		//finds the current temp and displays it
 	var temp = document.getElementById("temp");
 	temp.innerHTML = Math.floor((currentWeather.main.temp * (9/5)) - 459.67) + '&#176';
@@ -363,7 +362,7 @@ function flip() {
 		card.className = "card reverseFlip";
 		setTimeout(function () {
 			card.className = "card noAnimation";
-		},1500);
+		},1000);
 	}
 }
 </script>

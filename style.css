@@ -414,11 +414,34 @@ body {
 	position:absolute;
 	
 }
-table {
-	top:10%;
-	left:50%;
+.tableContainer {
+	height:80%;
+	width:70%;
 	position:absolute;
+	overflow-y:scroll;
+	overflow-x:hidden;
+	top:50%;
+	left:50%;
 	transform:translate(-50%,-50%);
+}
+table {
+	color:white;
+}
+tr {
+	border:1px solid white;
+	height:30px;
+	font-size:16pt;
+	font-family:calibri;
+}
+tr:nth-child(odd) {
+	background-color:#7b7d84;
+}
+tr:nth-child(even) {
+	background-color:#cdcfd6;
+	color:black;
+}
+tr:first-child {
+	background-color:#566689;
 }
 .rangeBox {
 	height:auto;

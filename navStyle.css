@@ -37,14 +37,14 @@
 	100% { top:50%; transform:rotate(45deg);}
 }
 .topMoveForward {
-	animation:topAnimate 1.5s forwards;
+	animation:topAnimate 1s forwards;
 }
 @keyframes middleAnimate{
 	0% {transform:scale(1);}
 	70%, 100% { transform:scale(0); }
 }
 .middleMoveForward {
-	animation:middleAnimate 1.5s forwards;
+	animation:middleAnimate 1s forwards;
 }
 @keyframes bottomAnimate {
 	0% { top:100%;  transform:rotate(0deg);}
@@ -52,7 +52,7 @@
 	100% { top:50%;  transform:rotate(-225deg);}
 }
 .bottomMoveForward {
-	animation:bottomAnimate 1.5s forwards;
+	animation:bottomAnimate 1s forwards;
 }
 @keyframes topAnimateBack {
 	0% { top:50%; transform:rotate(45deg);}
@@ -70,13 +70,13 @@
 }
 
 .topMoveBack {
-	animation:topAnimateBack 1.5s forwards;
+	animation:topAnimateBack 1s forwards;
 }
 .middleMoveBack {
-	animation:middleAnimateBack 1.5s forwards;
+	animation:middleAnimateBack 1s forwards;
 }
 .bottomMoveBack {
-	animation:bottomAnimateBack 1.5s forwards;
+	animation:bottomAnimateBack 1s forwards;
 }
 .noAnimation {
 	animation:none;
@@ -90,10 +90,10 @@
 	box-shadow:3px 0 10px black;
 }
 .animate {
-	animation:displayNav 1.5s ease-in-out forwards;
+	animation:displayNav 1s ease-in-out forwards;
 }
 .hideNav {
-	animation:hideNav 1.5s ease-in-out forwards;
+	animation:hideNav 1s ease-in-out forwards;
 }
 .hidden {
 	display:none;

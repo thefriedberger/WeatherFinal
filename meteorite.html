@@ -49,7 +49,7 @@ function success(pos) {
 }
 
 function error(er) {
-	
+
 }
 
 navigator.geolocation.getCurrentPosition(success, error, options);
@@ -65,42 +65,39 @@ function parseMeteorites() {
 }
 var range
 
-function findRange() {
-}
-
 function findMeteorites() {
-	console.log(data);	
-	
+	console.log(data);
+
 	range = document.getElementById('select').value;
-	
+
 	removeRow();
-	
+
 	createHead();
 	for (var i = 0; i < data.length; i++) {
 		if(data[i].hasOwnProperty('geolocation')) {
 			lon2 = data[i].geolocation.coordinates[0];
 			lat2 = data[i].geolocation.coordinates[1];
 
-			var R = 3958.7558657440545; // Radius of earth in Miles 
+			var R = 3958.7558657440545; // Radius of earth in Miles
 			var dLat = toRad(lat2-lat1);
-			var dLon = toRad(lon2-lon1); 
+			var dLon = toRad(lon2-lon1);
 			var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-				Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * 
-				Math.sin(dLon/2) * Math.sin(dLon/2); 
-			var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+				Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+				Math.sin(dLon/2) * Math.sin(dLon/2);
+			var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 			var d = R * c;
 			var table = document.getElementById('table');
-			
+
 			if(d < range) {
 				d = Math.floor(d);
 				var date = data[i].year.substring(0,4);
 				console.log("The " + data[i].name + " Meteorite landed " + d + " miles away in " + date);
-				
+
 				table.appendChild(createRow(data[i].name,data[i].mass,date,d));
 			}
 		}
 	}
-	
+
 }
 function toRad(Value) {
     /** Converts numeric degrees to radians */
@@ -108,19 +105,19 @@ function toRad(Value) {
 }
 function createHead() {
 	var tr = document.createElement('tr');
-	
+
 	var th = [  document.createElement('th'),
 				document.createElement('th'),
 				document.createElement('th'),
 				document.createElement('th') ];
-				
+
 	tr.setAttribute('class','tr');
-	
+
 	th[0].innerHTML = 'Name';
 	th[1].innerHTML = 'Mass (grams)';
 	th[2].innerHTML = 'Year';
 	th[3].innerHTML = 'Distance (miles)';
-	
+
 	for (var i = 0; i < th.length; i++) {
 		tr.appendChild(th[i]);
 	}
@@ -128,29 +125,27 @@ function createHead() {
 }
 function createRow(name, mass, year, distance){
 	var tr = document.createElement('tr');
-			 
+
 	var td = [  document.createElement('td'),
 				document.createElement('td'),
 				document.createElement('td'),
 				document.createElement('td') ];
-				
+
 	tr.setAttribute('class','tr');
-	
+
 	td[0].innerHTML = name;
 	td[1].innerHTML = mass;
 	td[2].innerHTML = year;
 	td[3].innerHTML= distance;
-	
+
 	for (var i = 0; i < td.length; i++) {
 		tr.appendChild(td[i]);
 	}
-	
+
 	return tr;
 }
 function removeRow() {
 	var tr = document.getElementsByClassName('tr');
-	//var table = document.getElementById('table');
-	//console.log(tr);
 	while (tr.length > 0) {
 		table.deleteRow(0);
 	}
@@ -164,30 +159,30 @@ function animate() {
 	var middleBar = document.getElementById("middle");
 	var bottomBar = document.getElementById("bottom");
 	var nav = document.getElementById('nav');
-	
+
 	if (topBar.className == "thingy noAnimation") {
 		topBar.classList.add("topMoveForward");
 		middleBar.classList.add("middleMoveForward");
 		bottomBar.classList.add("bottomMoveForward");
-		
+
 		topBar.classList.remove("noAnimation");
 		middleBar.classList.remove("noAnimation");
 		bottomBar.classList.remove("noAnimation");
-		
+
 		nav.classList.remove('hidden');
 		nav.classList.add('animate');
 	} else {
 		topBar.classList.add("topMoveBack");
 		middleBar.classList.add("middleMoveBack");
 		bottomBar.classList.add("bottomMoveBack");
-		
+
 		topBar.classList.remove("topMoveForward");
 		middleBar.classList.remove("middleMoveForward");
 		bottomBar.classList.remove("bottomMoveForward");
-		
+
 		nav.classList.remove('animate');
 		nav.classList.add('hideNav');
-		
+
 		setTimeout(function() {
 			topBar.className = "thingy noAnimation";
 			middleBar.className = "thingy noAnimation";

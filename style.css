@@ -1,475 +1,500 @@
 body {
-	background-color:gray; 
-	overflow:hidden; 
-	margin:0;
-	padding:0;
-	font-family:calibri;
-}
+  background-color: gray;
+  margin: 0;
+  padding: 0;
+  font-family: calibri; }
+
 .wrapper {
-	height:270px;
-	width:350px;
-	position:absolute;
-	top:50%;
-	left:50%;
-	transform:translate(-50%,-50%);
-	color:white;
-	font-size:30pt;
-	perspective:1000px;
-	user-select:none;
-}
+  height: 270px;
+  width: 350px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 30pt;
+  perspective: 1000px;
+  user-select: none; }
+
 .card {
-	height:100%;
-	width:100%;
-	position:absolute;
-	perspective:600px;
-	border-radius:5px;
-	box-shadow:5px 5px 20px black;
-	transition:1.5s all;
-	transform-style:preserve-3d;
-	transform:rotateX(0deg);
-	cursor:pointer;
-}
-.noAnimation {animation:none;}
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  perspective: 600px;
+  border-radius: 5px;
+  box-shadow: 5px 5px 20px black;
+  transition: 1.5s all;
+  transform-style: preserve-3d;
+  transform: rotateX(0deg);
+  cursor: pointer; }
 
-.cardFlip {animation:cardFlip 1.5s forwards;}
+.noAnimation {
+  animation: none; }
 
-.reverseFlip {animation:reverseFlip 1.5s forwards;}
+.cardFlip {
+  animation: cardFlip 1.5s forwards; }
+
+.reverseFlip {
+  animation: reverseFlip 1.5s forwards; }
 
 .front {
-	position:absolute;
-	height:100%;
-	width:100%;
-	border-radius:5px;
-	background-color:#435170;
-	backface-visibility: hidden;
-}
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  border-radius: 5px;
+  background-color: #435170;
+  backface-visibility: hidden; }
+
 .back {
-	position:relative;
-	height:100%;
-	width:100%;
-	border-radius:5px;
-	background-color:#435170;
-	backface-visibility: hidden;
-	transform:rotateX(180deg);
-	z-index:100;
-}
+  position: relative;
+  height: 100%;
+  width: 100%;
+  border-radius: 5px;
+  background-color: #435170;
+  backface-visibility: hidden;
+  transform: rotateX(180deg);
+  z-index: 100; }
+
 #location {
-	left:0%;
-	text-align:center;
-	top:15%;
-	position:absolute;
-	width:100%;
-	font-size:24pt;
-}
+  left: 0%;
+  text-align: center;
+  top: 15%;
+  position: absolute;
+  width: 100%;
+  font-size: 24pt; }
+
 .bar {
-	height:20%;
-	width:100%;
-	position:absolute;
-	transition:1s all;
-	backface-visibility:hidden;
-}
+  height: 20%;
+  width: 100%;
+  position: absolute; }
+
 .banner {
-	background-color:#566689;
-	border-radius:5px 5px 0 0;
-	z-index:10;
-	height:22%;
-}
+  background-color: #566689;
+  border-radius: 5px 5px 0 0;
+  z-index: 10;
+  height: 22%; }
+
 .dateBar {
-	top:20%;
-	//background-color:#efde58;
-	z-index:9;
-}
-.tempBar {
-	top:42%;
-	//background-color:#5C65EE;
-	z-index:8;
-}
-.windBar {
-	top:60%;
-	height:40%;
-	//background-color:#5CEE9C;
-	z-index:7;
-	border-radius:0 0 5px 5px;
-}
-.banner:hover {
-	box-shadow:0 0 10px black;
-}
+  top: 20%;
+  z-index: 9; }
+
 #date {
-	text-align:center;
-	position:relative;
-	top:25%;
-	font-size:20pt;
-}
+  text-align: center;
+  position: relative;
+  top: 25%;
+  font-size: 20pt; }
+
+.tempBar {
+  top: 42%;
+  z-index: 8; }
+
 #temp {
-	left:51%;
-	position:absolute;
-	transform:translate(-50%,0);
-}
+  left: 51%;
+  position: absolute;
+  transform: translate(-50%, 0); }
+
+.windBar {
+  top: 60%;
+  height: 40%;
+  z-index: 7;
+  border-radius: 0 0 5px 5px; }
+
 #wind {
-	top:15%;
-	left:50%;
-	position:absolute;
-	transform:translate(-50%,0);
-	font-size:20pt;
-	text-align:center;
-}
-#speed {position:relative;}
-#weather {
-	left:50%;
-	top:80%;
-	width:90%;
-	position:absolute;
-	font-size:25pt;
-	text-align:center;
-	transform:translate(-50%,0%);
-}
+  top: 15%;
+  left: 50%;
+  position: absolute;
+  width: 80%;
+  transform: translate(-50%, 0);
+  font-size: 20pt;
+  text-align: center; }
+
+#speed {
+  position: relative; }
+
 #speed::after {
-	content:"mph";
-	font-size:12pt;
-}
-#chill {position:relative;}
+  content: "mph";
+  font-size: 12pt; }
+
+#direction {
+  position: relative; }
+
+#weather {
+  left: 50%;
+  top: 80%;
+  width: 90%;
+  position: absolute;
+  font-size: 25pt;
+  text-align: center;
+  transform: translate(-50%, 0%); }
 
 .slot {
-	height:95%;
-	width:18.5%;
-	position:absolute;
-	top:2.5%;
-	box-shadow:inset 0 0 10px black;
-	text-align:center;
-	font-size:20pt;
-	background-color:#566689;
-	border-radius:5px;
-	overflow:hidden;
-}
-#day1 {left:.75%;}
-#day2 {left:20.75%;}
-#day3 {left:40.75%;}
-#day4 {left:60.75%;}
-#day5 {left:80.75%;}
+  height: 95%;
+  width: 18.5%;
+  position: absolute;
+  top: 2.5%;
+  box-shadow: inset 0 0 10px black;
+  text-align: center;
+  font-size: 20pt;
+  background-color: #566689;
+  border-radius: 5px;
+  overflow: hidden; }
+
+#day1 {
+  left: .75%; }
+
+#day2 {
+  left: 20.75%; }
+
+#day3 {
+  left: 40.75%; }
+
+#day4 {
+  left: 60.75%; }
+
+#day5 {
+  left: 80.75%; }
 
 .high {
-	top:45%;
-	position:relative;
-}
+  top: 45%;
+  position: relative; }
+
 .low {
-	top:50%;
-	position:relative;
-}
+  top: 50%;
+  position: relative; }
+
 .high::before {
-	content:"High ";
-	font-size:16pt;
-}
+  content: "High ";
+  font-size: 16pt; }
+
 .low::before {
-	content:"Low ";
-	font-size:16pt;
-}
+  content: "Low ";
+  font-size: 16pt; }
+
 .day {
-	font-size:25pt;
-	position:relative;
-	height:17%;
-	width:100%;
-	background-color:rgba(43, 57, 81,.9);
-}
+  font-size: 25pt;
+  position: relative;
+  height: 17%;
+  width: 100%;
+  background-color: rgba(43, 57, 81, 0.9); }
 
 /***** Set animation layers for Sunny, Cloudy, and partly sunny/cloudy *******/
-
 .sunny .layer1, .cloudy .layer1, .partly .layer1, .breezy .layer1 {
-	height:50px;
-	width:50px;
-	border-radius:50%;
-	top:25%;
-	left:20%;
-	background-color:#efd45b;
-	position:absolute;
-	animation:sunny 2s linear infinite;
-}
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  top: 25%;
+  left: 20%;
+  background-color: #efd45b;
+  position: absolute;
+  animation: sunny 2s linear infinite; }
+
 .cloudy .layer2, .partly .layer2 {
-	height:100%;
-	width:100%;
-	top:20%;
-	background-image:url(images/cloud.png);
-	background-size:40%;
-	background-repeat:no-repeat;
-	position:absolute;
-	animation:cloudMove 7.5s linear infinite;
-}
+  height: 100%;
+  width: 100%;
+  top: 20%;
+  background-image: url(images/cloud.png);
+  background-size: 40%;
+  background-repeat: no-repeat;
+  position: absolute;
+  animation: cloudMove 7.5s linear infinite; }
+
 .cloudy .layer3, .partly .layer3, .breezy .layer2 {
-	height:100%;
-	width:100%;
-	top:33%;
-	background-image:url(images/cloud.png);
-	background-size:48%;
-	background-repeat:no-repeat;
-	position:absolute;
-	animation:cloudMove 8.7s linear infinite;
-}
+  height: 100%;
+  width: 100%;
+  top: 33%;
+  background-image: url(images/cloud.png);
+  background-size: 48%;
+  background-repeat: no-repeat;
+  position: absolute;
+  animation: cloudMove 8.7s linear infinite; }
+
 .cloudy .layer4, .partly .layer4 {
-	height:100%;
-	width:100%;
-	top:42%;
-	background-image:url(images/cloud.png);
-	background-size:60%;
-	background-repeat:no-repeat;
-	position:absolute;
-	animation:cloudMove 6.5s linear infinite;
-}
+  height: 100%;
+  width: 100%;
+  top: 42%;
+  background-image: url(images/cloud.png);
+  background-size: 60%;
+  background-repeat: no-repeat;
+  position: absolute;
+  animation: cloudMove 6.5s linear infinite; }
 
 /******* Sets animation layers for rain ********/
-
 .rainy .layer1, .lightRain .layer1 {
-	height:100%;
-	width:100%;
-	left:10%;
-	background-image:url(images/rain_drop.png);
-	background-size:7%;
-	background-repeat:no-repeat;
-	position:absolute;
-	animation:rainfall 2s linear infinite;
-}
+  height: 100%;
+  width: 100%;
+  left: 10%;
+  background-image: url(images/rain_drop.png);
+  background-size: 7%;
+  background-repeat: no-repeat;
+  position: absolute;
+  animation: rainfall 2s linear infinite; }
+
 .rainy .layer10, .lightRain .layer10 {
-	height:100%;
-	width:100%;
-	left:30%;
-	background-image:url(images/rain_drop.png);
-	background-size:6%;
-	background-repeat:no-repeat;
-	position:absolute;
-	animation:rainfall 1.5s linear infinite;
-}
+  height: 100%;
+  width: 100%;
+  left: 30%;
+  background-image: url(images/rain_drop.png);
+  background-size: 6%;
+  background-repeat: no-repeat;
+  position: absolute;
+  animation: rainfall 1.5s linear infinite; }
+
 .rainy .layer3, .lightRain .layer3 {
-	height:100%;
-	width:100%;
-	left:45%;
-	background-image:url(images/rain_drop.png);
-	background-size:8%;
-	background-repeat:no-repeat;
-	position:absolute;
-	animation:rainfall 1.1s linear infinite;
-}
+  height: 100%;
+  width: 100%;
+  left: 45%;
+  background-image: url(images/rain_drop.png);
+  background-size: 8%;
+  background-repeat: no-repeat;
+  position: absolute;
+  animation: rainfall 1.1s linear infinite; }
+
 .rainy .layer4, .lightRain .layer4 {
-	height:100%;
-	width:100%;
-	left:79%;
-	background-image:url(images/rain_drop.png);
-	background-size:5%;
-	background-repeat:no-repeat;
-	position:absolute;
-	animation:rainfall 1.6s linear infinite;
-}
+  height: 100%;
+  width: 100%;
+  left: 79%;
+  background-image: url(images/rain_drop.png);
+  background-size: 5%;
+  background-repeat: no-repeat;
+  position: absolute;
+  animation: rainfall 1.6s linear infinite; }
+
 .rainy .layer5 {
-	height:100%;
-	width:100%;
-	left:18%;
-	background-image:url(images/rain_drop.png);
-	background-size:11%;
-	background-repeat:no-repeat;
-	position:absolute;
-	animation:rainfall 2.1s linear infinite;
-}
+  height: 100%;
+  width: 100%;
+  left: 18%;
+  background-image: url(images/rain_drop.png);
+  background-size: 11%;
+  background-repeat: no-repeat;
+  position: absolute;
+  animation: rainfall 2.1s linear infinite; }
+
 .rainy .layer6 {
-	height:100%;
-	width:100%;
-	left:37%;
-	background-image:url(images/rain_drop.png);
-	background-size:10%;
-	background-repeat:no-repeat;
-	position:absolute;
-	animation:rainfall 2.5s linear infinite;
-}
+  height: 100%;
+  width: 100%;
+  left: 37%;
+  background-image: url(images/rain_drop.png);
+  background-size: 10%;
+  background-repeat: no-repeat;
+  position: absolute;
+  animation: rainfall 2.5s linear infinite; }
+
 .rainy .layer7 {
-	height:100%;
-	width:100%;
-	left:57%;
-	background-image:url(images/rain_drop.png);
-	background-size:11%;
-	background-repeat:no-repeat;
-	position:absolute;
-	animation:rainfall 1.9s linear infinite;
-}
+  height: 100%;
+  width: 100%;
+  left: 57%;
+  background-image: url(images/rain_drop.png);
+  background-size: 11%;
+  background-repeat: no-repeat;
+  position: absolute;
+  animation: rainfall 1.9s linear infinite; }
+
 .rainy .layer8 {
-	height:100%;
-	width:100%;
-	left:76%;
-	background-image:url(images/rain_drop.png);
-	background-size:10%;
-	background-repeat:no-repeat;
-	position:absolute;
-	animation:rainfall 2.2s linear infinite;
-}
+  height: 100%;
+  width: 100%;
+  left: 76%;
+  background-image: url(images/rain_drop.png);
+  background-size: 10%;
+  background-repeat: no-repeat;
+  position: absolute;
+  animation: rainfall 2.2s linear infinite; }
+
 .rainy .layer9, .lightRain .layer9 {
-	height:100%;
-	width:100%;
-	top:15%;
-	background-image:url(images/storm_cloud.png);
-	background-size:110%;
-	background-repeat:no-repeat;
-	background-position:50% -30%;
-	position:absolute;
-}
+  height: 100%;
+  width: 100%;
+  top: 10%;
+  background-image: url(images/storm_cloud.png);
+  background-size: 110%;
+  background-repeat: no-repeat;
+  background-position: 50% -30%;
+  position: absolute; }
 
 /******* Fallback if weather isn't covered *******/
-
 .defaultWeather .layer1::after {
-	content:"There is no weather";
-	top:15%;
-	left:0%;
-	position:absolute;
-	text-align:center;
-	font-size:20pt;
-	color:white;
-	height:30%;
-	background-color:rgba(0,0,0,.15);
-	box-shadow:inset 0 0 5px black;
-}
+  content: "There is no weather";
+  top: 15%;
+  left: 0%;
+  position: absolute;
+  text-align: center;
+  font-size: 20pt;
+  color: white;
+  height: 30%;
+  background-color: rgba(0, 0, 0, 0.15);
+  box-shadow: inset 0 0 5px black; }
 
 /******* Call me the breeze ********/
 .breeze {
-	position:absolute;
-	stroke:rgba(0,0,0,0);
-	stroke-width:3.5px;
-	stroke-linecap:round;
-	fill:rgba(0,0,0,0);
-	stroke:#b2ccf7;
-}
+  position: absolute;
+  stroke: rgba(0, 0, 0, 0);
+  stroke-width: 3.5px;
+  stroke-linecap: round;
+  fill: rgba(0, 0, 0, 0);
+  stroke: #b2ccf7; }
+
 .breeze1 {
-	top:30%;
-	left:0;
-	animation:breeze 4.5s linear infinite;
-}
+  top: 30%;
+  left: 0;
+  animation: breeze 4.5s linear infinite; }
+
 .breeze2 {
-	top:20%;
-	left:0;
-	animation:breeze 3.5s linear infinite;
-	transform:scaleY(.8);
-}
+  top: 20%;
+  left: 0;
+  animation: breeze 3.5s linear infinite;
+  transform: scaleY(0.8); }
+
 .breeze3 {
-	top:40%;
-	left:0;
-	animation:breeze 2.5s linear infinite;
-	transform:scaleY(.7);
-}
+  top: 40%;
+  left: 0;
+  animation: breeze 2.5s linear infinite;
+  transform: scaleY(0.7); }
+
 .lightning {
-	position:absolute;
-	left:10%;
-	top:-10%;
-	height:100%;
-	width:100%;
-}
+  position: absolute;
+  left: 10%;
+  top: -10%;
+  height: 100%;
+  width: 100%; }
+
 .lightning1 {
-	transform:scale(.7);
-	left:-20%;
-	top:-10%;
-	animation:flash 3.5s linear infinite;
-}
+  transform: scale(0.7);
+  left: -20%;
+  top: -10%;
+  animation: flash 3.5s linear infinite; }
+
 .lightning2 {
-	transform:scale(.5);
-	left:35%;
-	top:-20%;
-	animation:flash 3.5s linear infinite;
-}
+  transform: scale(0.5);
+  left: 35%;
+  top: -20%;
+  animation: flash 3.5s linear infinite; }
+
 .lightning3 {
-	animation:flash 3.5s linear infinite;
-}
+  animation: flash 3.5s linear infinite; }
+
 /************ PUT ANIMATIONS BELOW HERE ***************/
-
 @keyframes cardFlip {
-	0% {  transform:rotateX(0); width:350px; height:270px; left:0%;}
-	100% { transform:rotateX(180deg); width:700px; height:280px; left:-50%; box-shadow:5px -5px 20px black;}
-}
+  0% {
+    transform: rotateX(0);
+    width: 350px;
+    height: 270px;
+    left: 0%; }
+  100% {
+    transform: rotateX(180deg);
+    width: 700px;
+    height: 280px;
+    left: -50%;
+    box-shadow: 5px -5px 20px black; } }
 @keyframes reverseFlip {
-	0% { transform:rotateX(180deg); width:700px; height:280px; left:-50%; box-shadow:5px -5px 20px black;}
-	100% {  transform:rotateX(-180); width:350px; height:270px; left:0%;}
-}
+  0% {
+    transform: rotateX(180deg);
+    width: 700px;
+    height: 280px;
+    left: -50%;
+    box-shadow: 5px -5px 20px black; }
+  100% {
+    transform: rotateX(-180);
+    width: 350px;
+    height: 270px;
+    left: 0%; } }
 @keyframes sunny {
-	0%, 100% { box-shadow:0 0 20px #f4eb42; }
-	50% { box-shadow:0 0 50px #f4eb42; }
-}
+  0%, 100% {
+    box-shadow: 0 0 20px #f4eb42; }
+  50% {
+    box-shadow: 0 0 50px #f4eb42; } }
 @keyframes rainfall {
-	0% { top:17%;}
-	100% { top: 130%;}
-}
+  0% {
+    top: 17%; }
+  100% {
+    top: 130%; } }
 @keyframes cloudMove {
-	0% {left:-70%; }
-	100% { left:105%; }
-}
+  0% {
+    left: -70%; }
+  100% {
+    left: 105%; } }
 @keyframes breeze {
-	from { stroke-dasharray:50 550; stroke-dashoffset:650; }
-	to { stroke-dasharray:50 550; stroke-dashoffset:100;}
-}
+  from {
+    stroke-dasharray: 50 550;
+    stroke-dashoffset: 650; }
+  to {
+    stroke-dasharray: 50 550;
+    stroke-dashoffset: 100; } }
 @keyframes flash {
-	0%,70% {fill:yellow; opacity:0;}
-	71%,80% {fill:yellow; opacity:1; }
-	90% {fill:yellow; opacity:.5;}
-	100% { opacity:0;}
-}
-
+  0%,70% {
+    fill: yellow;
+    opacity: 0; }
+  71%,80% {
+    fill: yellow;
+    opacity: 1; }
+  90% {
+    fill: yellow;
+    opacity: .5; }
+  100% {
+    opacity: 0; } }
 /************** Button and Nav CSS *****************/
-
 .container {
-	height:80%;
-	width:80%;
-	left:150px;
-	top:80px;
-	background-color:#5f6166;
-	position:absolute;
-	
-}
+  height: 80%;
+  width: 80%;
+  left: 150px;
+  top: 80px;
+  background-color: #5f6166;
+  position: absolute; }
+
 .tableContainer {
-	height:80%;
-	width:70%;
-	position:absolute;
-	overflow-y:scroll;
-	overflow-x:hidden;
-	top:50%;
-	left:50%;
-	transform:translate(-50%,-50%);
-}
+  height: 80%;
+  width: 70%;
+  position: absolute;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%); }
+
 table {
-	color:white;
-}
+  color: white; }
+
 tr {
-	border:1px solid white;
-	height:30px;
-	font-size:16pt;
-	font-family:calibri;
-}
+  border: 1px solid white;
+  height: 30px;
+  font-size: 16pt;
+  font-family: calibri; }
+
 tr:nth-child(odd) {
-	background-color:#7b7d84;
-}
+  background-color: #7b7d84; }
+
 tr:nth-child(even) {
-	background-color:#cdcfd6;
-	color:black;
-}
+  background-color: #cdcfd6;
+  color: black; }
+
 tr:first-child {
-	background-color:#566689;
-}
+  background-color: #566689; }
+
 .rangeBox {
-	height:auto;
-	width:130px;
-	top:10px;
-	left:10px;
-	position:absolute;
-}
+  height: auto;
+  width: 130px;
+  top: 10px;
+  left: 10px;
+  position: absolute; }
+
 #select {
-	background-color:white;
-	border:none;
-	height:30px;
-	width:120px;
-	font-family:calibri;
-	font-size:12pt;
-	margin-bottom:10px;
-}
+  background-color: white;
+  border: none;
+  height: 30px;
+  width: 120px;
+  font-family: calibri;
+  font-size: 12pt;
+  margin-bottom: 10px; }
+
 .button {
-	background-color:#566689;
-	color:white;
-	border:none;
-	height:40px;
-	width:90px;
-	font-family:calibri;
-	font-size:16pt;
-	transition:.5s all;
-}
+  background-color: #566689;
+  color: white;
+  border: none;
+  height: 40px;
+  width: 90px;
+  font-family: calibri;
+  font-size: 16pt;
+  transition: .5s all; }
+
 .button:hover {
-	box-shadow:0 0 5px black;
-	transform:scale(1.03);
-}
+  box-shadow: 0 0 5px black;
+  transform: scale(1.03); }
+
+/*# sourceMappingURL=style.css.map */

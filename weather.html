@@ -160,7 +160,7 @@ function getForecast() {
 		//display date for forecasts this doens't work as the APIs don't have any dates that can be used. Will have to increment manually
 		var forecastDay = list[i].dt;
 		var day = document.getElementsByClassName("day");
-		day[i].innerHTML += findDate();
+		day[i].innerHTML += findDate(i);
 		/*
 		Determine which images to display for projected weather
 		determine background color for each card
@@ -212,13 +212,17 @@ function findDate(i, length) {
 	var date = d.getDate();//gets the number date
 	var days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 	var day;
-	for (var i = 0; i < days.length; i++) {
-		day = days[d.getDay()+i];//gets the name day
-		var j = 0;
-		if ((d.getDay()+i)>6) {
-			j = j+1;
-			day = days[0+j]
-		}
+	//So I think I have a really shaky workaround
+	if (d.getDay() == 6) {
+		 day = days[d.getDay()];
+	}else {
+		day = days[d.getDay()+i];
+	} while (d.getDay()+i > 6) {
+		day = days[0];
+			for (var j = 0; j < i; j++){
+				day = days[0+j];
+			}
+		i=0;
 	}
 	var months = ["Jan",'Feb','Mar','Apr','May','June','July','Aug','Sep','Oct','Nov','Dec'];
 	var month = months[d.getMonth()];

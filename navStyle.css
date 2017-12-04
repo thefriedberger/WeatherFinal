@@ -1,6 +1,6 @@
 .frame {
 	height:100%;
-	width:140px;	
+	width:140px;
 	position:absolute;
 }
 #toggleBox {
@@ -107,9 +107,9 @@
 	100% {height:0%; width:100%; display:hidden;}
 }
 .navElement {
-	width:100%; 
-	font-size:20pt; 
-	position:absolute; 
+	width:100%;
+	font-size:20pt;
+	position:absolute;
 	text-align:center;
 	color:white;
 	float:left;

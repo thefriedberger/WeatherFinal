@@ -71,6 +71,7 @@
 	</div>
 </div>
 <script>
+
 var options = {
   enableHighAccuracy: true,
   timeout: 5000,
@@ -80,16 +81,21 @@ function success(pos) {
 	var crd = pos.coords;
 	var lat = crd.latitude;
 	var lon = crd.longitude
+
 	console.log(lat);
 	console.log(lon);
 	getLocationWeather(lat, lon);
 	getLocationForecast(lat, lon);
 	getLocationName(lat, lon);
 }
+
 function error(er) {
+
 }
 navigator.geolocation.getCurrentPosition(success, error, options);
+
 var xhttp1;//for getting current location weather
+
 function getLocationWeather(lat, lon){
 	var data;
 	xhttp1 = new XMLHttpRequest();
@@ -97,7 +103,9 @@ function getLocationWeather(lat, lon){
 	xhttp1.open("GET", "http://api.openweathermap.org/data/2.5/weather?lat="+lat+"&lon="+lon+"&APPID=29bb226f726114879207742f5261bfad");
 	xhttp1.send();
 }
+
 var geo; //for getting current location name (city/town)
+
 function getLocationName(lat, lon) {
 	var data;
 	geo = new XMLHttpRequest();
@@ -105,17 +113,22 @@ function getLocationName(lat, lon) {
 	geo.open("GET", "http://open.mapquestapi.com/geocoding/v1/reverse?key=C9ml1AscuDGhkLOtfoKQvTUYXbNlaauw&location="+lat+","+lon);
 	geo.send();
 }
+
 function findLocation() {
 	currentLocation = JSON.parse(geo.responseText);
 	var location =  currentLocation.results[0].locations[0].adminArea5 + ', ' + currentLocation.results[0].locations[0].adminArea3;
 	return location;
 }
+
 var currentWeather;
+
 function parseWeather() {
 	currentWeather = JSON.parse(xhttp1.responseText);
 }
 function getWeather(e) {
 	console.log(currentWeather); //use as a reference to look into api
+
+	//add layers, first number is animation layer (so forecast day), last number is number of layers to make
 	addLayer(0, 10);
 	addLayer(1, 10);
 	addLayer(2, 10);
@@ -124,16 +137,19 @@ function getWeather(e) {
 		//finds the current temp and displays it
 	var temp = document.getElementById("temp");
 	temp.innerHTML = Math.floor((currentWeather.main.temp * (9/5)) - 459.67) + '&#176';
+
 	var date = document.getElementById('date');
 	date.innerHTML = findDate(0,"full");
 	//finds current location and displays it
 	var location = document.getElementById("location");
 	myLocation = findLocation();
 	location.innerHTML = myLocation;
+
 	//finds current wind speed and displays it
 	var windSpeed = document.getElementById("speed");
 	var speed = currentWeather.wind.speed
 	windSpeed.innerHTML = Math.ceil(speed);
+
 	var weather = document.getElementById('weather');
 	weather.innerHTML = "Looks like " + currentWeather.weather[0].description;
 	//finds wind chill and displays
@@ -142,8 +158,10 @@ function getWeather(e) {
 	var windChill = document.getElementById("chill");
 	windChill.innerHTML = 'Feels like ' + currentWindChill + '&#176';
 	*/
+
 }
 var xhttp2;
+
 function getLocationForecast(lat, lon) {
 	var data;
 	xhttp2 = new XMLHttpRequest();
@@ -154,13 +172,16 @@ function getLocationForecast(lat, lon) {
 function getForecast() {
 	currentForecast = JSON.parse(xhttp2.responseText);
 	console.log(currentForecast);
+
 	list = currentForecast.list;
 		//loop through the 5 day forecast
 	for (var i = 0; i < 5; i++) {
 		//display date for forecasts this doens't work as the APIs don't have any dates that can be used. Will have to increment manually
+
 		var forecastDay = list[i].dt;
 		var day = document.getElementsByClassName("day");
 		day[i].innerHTML += findDate(i);
+
 		/*
 		Determine which images to display for projected weather
 		determine background color for each card
@@ -197,10 +218,12 @@ function getForecast() {
 		}else { //default screen response if I don't know have an animation for the weather
 			layer[i].classList.add('defaultWeather');
 		}
+
 		//get the high temperatures for each day, put them in
 		var highTemp = Math.ceil((list[i].main.temp_max * (9/5)) - 459.67);
 		var high = document.getElementsByClassName("high");
 		high[i].innerHTML += highTemp + '&#176';
+
 		//get the lows for each day, put them in
 		var lowTemp = Math.floor((list[i].main.temp_min * (9/5)) - 459.67);
 		var low = document.getElementsByClassName("low");
@@ -212,18 +235,13 @@ function findDate(i, length) {
 	var date = d.getDate();//gets the number date
 	var days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 	var day;
-	//So I think I have a really shaky workaround
-	if (d.getDay() == 6) {
-		 day = days[d.getDay()];
-	}else {
-		day = days[d.getDay()+i];
-	} while (d.getDay()+i > 6) {
-		day = days[0];
-			for (var j = 0; j < i; j++){
-				day = days[0+j];
+	day = days[d.getDay()+i];
+		while ((d.getDay()+i)>6) {
+			for (var j = 0; j < i; j++) {
+				day = days[0+j]
 			}
-		i=0;
-	}
+			i=0;
+		}
 	var months = ["Jan",'Feb','Mar','Apr','May','June','July','Aug','Sep','Oct','Nov','Dec'];
 	var month = months[d.getMonth()];
 	var year = d.getFullYear();
@@ -246,6 +264,7 @@ function makeWind(classNum) {
 	svg.appendChild(path);
 	return svg;
 }
+
 //has to be called for each layer that exists, taking layer index
 //would like to not do that, but it slims down html a lot
 function addLayer(animLayer, length) {
@@ -276,29 +295,36 @@ function makeLightning(classNum){
 }
 var theButton = document.getElementById("toggleBox");
 theButton.addEventListener("click", animate);
+
 function animate() {
 	var topBar = document.getElementById("top");
 	var middleBar = document.getElementById("middle");
 	var bottomBar = document.getElementById("bottom");
 	var nav = document.getElementById('nav');
+
 	if (topBar.className == "thingy noAnimation") {
 		topBar.classList.add("topMoveForward");
 		middleBar.classList.add("middleMoveForward");
 		bottomBar.classList.add("bottomMoveForward");
+
 		topBar.classList.remove("noAnimation");
 		middleBar.classList.remove("noAnimation");
 		bottomBar.classList.remove("noAnimation");
+
 		nav.classList.remove('hidden');
 		nav.classList.add('animate');
 	} else {
 		topBar.classList.add("topMoveBack");
 		middleBar.classList.add("middleMoveBack");
 		bottomBar.classList.add("bottomMoveBack");
+
 		topBar.classList.remove("topMoveForward");
 		middleBar.classList.remove("middleMoveForward");
 		bottomBar.classList.remove("bottomMoveForward");
+
 		nav.classList.remove('animate');
 		nav.classList.add('hideNav');
+
 		setTimeout(function() {
 			topBar.className = "thingy noAnimation";
 			middleBar.className = "thingy noAnimation";

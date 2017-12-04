@@ -429,7 +429,8 @@ body {
     opacity: .5; }
   100% {
     opacity: 0; } }
-/************** Button and Nav CSS *****************/
+
+/************** Table *****************/
 .container {
   height: 80%;
   width: 80%;
@@ -446,7 +447,8 @@ body {
   overflow-x: hidden;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%); }
+  transform: translate(-50%, -50%);
+}
 
 table {
   color: white; }
@@ -497,4 +499,15 @@ tr:first-child {
   box-shadow: 0 0 5px black;
   transform: scale(1.03); }
 
-/*# sourceMappingURL=style.css.map */
+.tableContainer::-webkit-scrollbar {
+	width:10px;
+}
+.tableContainer::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.7);
+	border-radius:10px;
+}
+.tableContainer::-webkit-scrollbar-thumb {
+	border-radius:10px;
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5);
+	background-color: rgba(200,200,200,.7);
+}

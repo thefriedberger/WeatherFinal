@@ -34,15 +34,6 @@
 		<div class="back">
 			<div class="slot" id="day1">
 				<div class="animation">
-					<div class="layer1"></div>
-					<div class="layer2"></div>
-					<div class="layer3"></div>
-					<div class="layer4"></div>
-					<div class="layer5"></div>
-					<div class="layer6"></div>
-					<div class="layer7"></div>
-					<div class="layer8"></div>
-					<div class="layer9"></div>
 				</div>
 				<div class="day"></div>
 				<div class="high"></div>
@@ -50,15 +41,6 @@
 			</div>
 			<div class="slot" id="day2">
 				<div class="animation">
-					<div class="layer1"></div>
-					<div class="layer2"></div>
-					<div class="layer3"></div>
-					<div class="layer4"></div>
-					<div class="layer5"></div>
-					<div class="layer6"></div>
-					<div class="layer7"></div>
-					<div class="layer8"></div>
-					<div class="layer9"></div>
 				</div>
 				<div class="day"></div>
 				<div class="high"></div>
@@ -66,15 +48,6 @@
 			</div>
 			<div class="slot" id="day3">
 				<div class="animation">
-					<div class="layer1"></div>
-					<div class="layer2"></div>
-					<div class="layer3"></div>
-					<div class="layer4"></div>
-					<div class="layer5"></div>
-					<div class="layer6"></div>
-					<div class="layer7"></div>
-					<div class="layer8"></div>
-					<div class="layer9"></div>
 				</div>
 				<div class="day"></div>
 				<div class="high"></div>
@@ -82,15 +55,6 @@
 			</div>
 			<div class="slot" id="day4">
 				<div class="animation">
-					<div class="layer1"></div>
-					<div class="layer2"></div>
-					<div class="layer3"></div>
-					<div class="layer4"></div>
-					<div class="layer5"></div>
-					<div class="layer6"></div>
-					<div class="layer7"></div>
-					<div class="layer8"></div>
-					<div class="layer9"></div>
 				</div>
 				<div class="day"></div>
 				<div class="high"></div>
@@ -98,15 +62,6 @@
 			</div>
 			<div class="slot" id="day5">
 				<div class="animation">
-					<div class="layer1"></div>
-					<div class="layer2"></div>
-					<div class="layer3"></div>
-					<div class="layer4"></div>
-					<div class="layer5"></div>
-					<div class="layer6"></div>
-					<div class="layer7"></div>
-					<div class="layer8"></div>
-					<div class="layer9"></div>
 				</div>
 				<div class="day"></div>
 				<div class="high"></div>
@@ -126,22 +81,22 @@ function success(pos) {
 	var crd = pos.coords;
 	var lat = crd.latitude;
 	var lon = crd.longitude
-	
+
 	console.log(lat);
 	console.log(lon);
-	getLocationCurrent(lat, lon);
+	getLocationWeather(lat, lon);
 	getLocationForecast(lat, lon);
 	getLocationName(lat, lon);
 }
 
 function error(er) {
-	
+
 }
 navigator.geolocation.getCurrentPosition(success, error, options);
 
-var xhttp1;//for getting current location weathe
+var xhttp1;//for getting current location weather
 
-function getLocationCurrent(lat, lon){
+function getLocationWeather(lat, lon){
 	var data;
 	xhttp1 = new XMLHttpRequest();
 	xhttp1.addEventListener("load", parseWeather);
@@ -158,11 +113,13 @@ function getLocationName(lat, lon) {
 	geo.open("GET", "http://open.mapquestapi.com/geocoding/v1/reverse?key=C9ml1AscuDGhkLOtfoKQvTUYXbNlaauw&location="+lat+","+lon);
 	geo.send();
 }
+
 function findLocation() {
 	currentLocation = JSON.parse(geo.responseText);
 	var location =  currentLocation.results[0].locations[0].adminArea5 + ', ' + currentLocation.results[0].locations[0].adminArea3;
 	return location;
 }
+
 var currentWeather;
 
 function parseWeather() {
@@ -170,32 +127,36 @@ function parseWeather() {
 }
 function getWeather(e) {
 	console.log(currentWeather); //use as a reference to look into api
-	
+	addLayer(0, 10);
+	addLayer(1, 10);
+	addLayer(2, 10);
+	addLayer(3, 10);
+	addLayer(4, 10);
 		//finds the current temp and displays it
 	var temp = document.getElementById("temp");
 	temp.innerHTML = Math.floor((currentWeather.main.temp * (9/5)) - 459.67) + '&#176';
-	
+
 	var date = document.getElementById('date');
 	date.innerHTML = findDate(0,"full");
 	//finds current location and displays it
 	var location = document.getElementById("location");
 	myLocation = findLocation();
 	location.innerHTML = myLocation;
-	
+
 	//finds current wind speed and displays it
 	var windSpeed = document.getElementById("speed");
 	var speed = currentWeather.wind.speed
 	windSpeed.innerHTML = Math.ceil(speed);
-	
+
 	var weather = document.getElementById('weather');
 	weather.innerHTML = "Looks like " + currentWeather.weather[0].description;
 	//finds wind chill and displays
 	/*
 	var currentWindChill = channel.wind.chill;
 	var windChill = document.getElementById("chill");
-	windChill.innerHTML = 'Feels like ' + currentWindChill + '&#176';	
+	windChill.innerHTML = 'Feels like ' + currentWindChill + '&#176';
 	*/
-		
+
 }
 var xhttp2;
 
@@ -209,16 +170,16 @@ function getLocationForecast(lat, lon) {
 function getForecast() {
 	currentForecast = JSON.parse(xhttp2.responseText);
 	console.log(currentForecast);
-	
+
 	list = currentForecast.list;
 		//loop through the 5 day forecast
 	for (var i = 0; i < 5; i++) {
 		//display date for forecasts this doens't work as the APIs don't have any dates that can be used. Will have to increment manually
-		
+
 		var forecastDay = list[i].dt;
 		var day = document.getElementsByClassName("day");
-		day[i].innerHTML += findDate(i);
-		
+		day[i].innerHTML += findDate();
+
 		/*
 		Determine which images to display for projected weather
 		determine background color for each card
@@ -235,7 +196,7 @@ function getForecast() {
 		} else if (weather == "clear sky") { //set class for sunny
 			layer[i].classList.add("sunny");
 		}else if (weather == "moderate rain") { //set class for normal rain
-			layer[i].classList.add("rainy"); 
+			layer[i].classList.add("rainy");
 		}else if (weather == "light rain" || weather == "Showers") { //set class for light rain
 			layer[i].classList.add('lightRain');
 		}else if (weather == "Scattered Thunderstorms") { //Scattered thunderstorms, only two bolts
@@ -255,12 +216,12 @@ function getForecast() {
 		}else { //default screen response if I don't know have an animation for the weather
 			layer[i].classList.add('defaultWeather');
 		}
-		
+
 		//get the high temperatures for each day, put them in
 		var highTemp = Math.ceil((list[i].main.temp_max * (9/5)) - 459.67);
 		var high = document.getElementsByClassName("high");
 		high[i].innerHTML += highTemp + '&#176';
-		
+
 		//get the lows for each day, put them in
 		var lowTemp = Math.floor((list[i].main.temp_min * (9/5)) - 459.67);
 		var low = document.getElementsByClassName("low");
@@ -271,7 +232,15 @@ function findDate(i, length) {
 	var d = new Date();
 	var date = d.getDate();//gets the number date
 	var days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-	var day = days[d.getDay()+i];//gets the name day
+	var day;
+	for (var i = 0; i < days.length; i++) {
+		day = days[d.getDay()+i];//gets the name day
+		var j = 0;
+		if ((d.getDay()+i)>6) {
+			j = j+1;
+			day = days[0+j]
+		}
+	}
 	var months = ["Jan",'Feb','Mar','Apr','May','June','July','Aug','Sep','Oct','Nov','Dec'];
 	var month = months[d.getMonth()];
 	var year = d.getFullYear();
@@ -294,11 +263,23 @@ function makeWind(classNum) {
 	svg.appendChild(path);
 	return svg;
 }
+
+//has to be called for each layer that exists, taking layer index
+//would like to not do that, but it slims down html a lot
+function addLayer(animLayer, length) {
+	var animationLayer = document.getElementsByClassName('animation');
+	var div = [ ];
+	for (var j = 0; j < length; j++) {
+		div.push(document.createElement('div'));
+		div[j].setAttribute('class', 'layer'+j);
+		animationLayer[animLayer].appendChild(div[j]);
+	}
+}
 //create lightning bolt
 function makeLightning(classNum){
 	var svg = document.createElementNS("http://www.w3.org/2000/svg",'svg');
 	var poly = [ document.createElementNS("http://www.w3.org/2000/svg",'polygon'),
-				 document.createElementNS("http://www.w3.org/2000/svg",'polygon'), 
+				 document.createElementNS("http://www.w3.org/2000/svg",'polygon'),
 				 document.createElementNS("http://www.w3.org/2000/svg",'polygon') ];
 	svg.classList.add("lightning");
 	svg.classList.add(classNum);
@@ -319,30 +300,30 @@ function animate() {
 	var middleBar = document.getElementById("middle");
 	var bottomBar = document.getElementById("bottom");
 	var nav = document.getElementById('nav');
-	
+
 	if (topBar.className == "thingy noAnimation") {
 		topBar.classList.add("topMoveForward");
 		middleBar.classList.add("middleMoveForward");
 		bottomBar.classList.add("bottomMoveForward");
-		
+
 		topBar.classList.remove("noAnimation");
 		middleBar.classList.remove("noAnimation");
 		bottomBar.classList.remove("noAnimation");
-		
+
 		nav.classList.remove('hidden');
 		nav.classList.add('animate');
 	} else {
 		topBar.classList.add("topMoveBack");
 		middleBar.classList.add("middleMoveBack");
 		bottomBar.classList.add("bottomMoveBack");
-		
+
 		topBar.classList.remove("topMoveForward");
 		middleBar.classList.remove("middleMoveForward");
 		bottomBar.classList.remove("bottomMoveForward");
-		
+
 		nav.classList.remove('animate');
 		nav.classList.add('hideNav');
-		
+
 		setTimeout(function() {
 			topBar.className = "thingy noAnimation";
 			middleBar.className = "thingy noAnimation";

@@ -25,26 +25,15 @@
 		<span class="banner bar"><div id="location"></div></span>
 			<span class="dateBar bar"><div id="date"></div></span>
 			<span class="tempBar bar"><div id="temp"></div></span>
-			<span class="windBar bar">
-				<div id="wind">
-					<div id="speed"></div>
-					<!-- <div id="direction"></div> -->
-				</div>
-			</span>
+			<span class="windBar bar"><div id="wind">
+				<div id="chill"></div>
+				<div id="speed"></div>
+			</div></span>
 				<div id="weather"></div>
 		</div>
 		<div class="back">
 			<div class="slot" id="day1">
 				<div class="animation">
-					<div class="layer1"></div>
-					<div class="layer2"></div>
-					<div class="layer3"></div>
-					<div class="layer4"></div>
-					<div class="layer5"></div>
-					<div class="layer6"></div>
-					<div class="layer7"></div>
-					<div class="layer8"></div>
-					<div class="layer9"></div>
 				</div>
 				<div class="day"></div>
 				<div class="high"></div>
@@ -52,15 +41,6 @@
 			</div>
 			<div class="slot" id="day2">
 				<div class="animation">
-					<div class="layer1"></div>
-					<div class="layer2"></div>
-					<div class="layer3"></div>
-					<div class="layer4"></div>
-					<div class="layer5"></div>
-					<div class="layer6"></div>
-					<div class="layer7"></div>
-					<div class="layer8"></div>
-					<div class="layer9"></div>
 				</div>
 				<div class="day"></div>
 				<div class="high"></div>
@@ -68,15 +48,6 @@
 			</div>
 			<div class="slot" id="day3">
 				<div class="animation">
-					<div class="layer1"></div>
-					<div class="layer2"></div>
-					<div class="layer3"></div>
-					<div class="layer4"></div>
-					<div class="layer5"></div>
-					<div class="layer6"></div>
-					<div class="layer7"></div>
-					<div class="layer8"></div>
-					<div class="layer9"></div>
 				</div>
 				<div class="day"></div>
 				<div class="high"></div>
@@ -84,15 +55,6 @@
 			</div>
 			<div class="slot" id="day4">
 				<div class="animation">
-					<div class="layer1"></div>
-					<div class="layer2"></div>
-					<div class="layer3"></div>
-					<div class="layer4"></div>
-					<div class="layer5"></div>
-					<div class="layer6"></div>
-					<div class="layer7"></div>
-					<div class="layer8"></div>
-					<div class="layer9"></div>
 				</div>
 				<div class="day"></div>
 				<div class="high"></div>
@@ -100,15 +62,6 @@
 			</div>
 			<div class="slot" id="day5">
 				<div class="animation">
-					<div class="layer1"></div>
-					<div class="layer2"></div>
-					<div class="layer3"></div>
-					<div class="layer4"></div>
-					<div class="layer5"></div>
-					<div class="layer6"></div>
-					<div class="layer7"></div>
-					<div class="layer8"></div>
-					<div class="layer9"></div>
 				</div>
 				<div class="day"></div>
 				<div class="high"></div>
@@ -118,7 +71,6 @@
 	</div>
 </div>
 <script>
-
 var options = {
   enableHighAccuracy: true,
   timeout: 5000,
@@ -128,39 +80,24 @@ function success(pos) {
 	var crd = pos.coords;
 	var lat = crd.latitude;
 	var lon = crd.longitude
-
 	console.log(lat);
 	console.log(lon);
-	getLocationCurrent(lat, lon);
+	getLocationWeather(lat, lon);
 	getLocationForecast(lat, lon);
 	getLocationName(lat, lon);
 }
-
 function error(er) {
-
 }
 navigator.geolocation.getCurrentPosition(success, error, options);
-
 var xhttp1;//for getting current location weather
-
-function getLocationCurrent(lat, lon){
+function getLocationWeather(lat, lon){
 	var data;
 	xhttp1 = new XMLHttpRequest();
 	xhttp1.addEventListener("load", parseWeather);
 	xhttp1.open("GET", "http://api.openweathermap.org/data/2.5/weather?lat="+lat+"&lon="+lon+"&APPID=29bb226f726114879207742f5261bfad");
 	xhttp1.send();
 }
-
-//var currentWeather;
-
-function parseWeather() {
-		currentWeather = JSON.parse(xhttp1.responseText);
-		return currentWeather;
-}
-
 var geo; //for getting current location name (city/town)
-
-//gets a more accurate location name
 function getLocationName(lat, lon) {
 	var data;
 	geo = new XMLHttpRequest();
@@ -168,49 +105,35 @@ function getLocationName(lat, lon) {
 	geo.open("GET", "http://open.mapquestapi.com/geocoding/v1/reverse?key=C9ml1AscuDGhkLOtfoKQvTUYXbNlaauw&location="+lat+","+lon);
 	geo.send();
 }
-
-function getWeather() {
-	var currentWeather = parseWeather();
+function findLocation() {
+	currentLocation = JSON.parse(geo.responseText);
+	var location =  currentLocation.results[0].locations[0].adminArea5 + ', ' + currentLocation.results[0].locations[0].adminArea3;
+	return location;
+}
+var currentWeather;
+function parseWeather() {
+	currentWeather = JSON.parse(xhttp1.responseText);
+}
+function getWeather(e) {
 	console.log(currentWeather); //use as a reference to look into api
-
-	//finds the current temp and displays it
+	addLayer(0, 10);
+	addLayer(1, 10);
+	addLayer(2, 10);
+	addLayer(3, 10);
+	addLayer(4, 10);
+		//finds the current temp and displays it
 	var temp = document.getElementById("temp");
 	temp.innerHTML = Math.floor((currentWeather.main.temp * (9/5)) - 459.67) + '&#176';
-
 	var date = document.getElementById('date');
 	date.innerHTML = findDate(0,"full");
 	//finds current location and displays it
 	var location = document.getElementById("location");
 	myLocation = findLocation();
 	location.innerHTML = myLocation;
-
 	//finds current wind speed and displays it
 	var windSpeed = document.getElementById("speed");
-	var speed = currentWeather.wind.speed;
+	var speed = currentWeather.wind.speed
 	windSpeed.innerHTML = Math.ceil(speed);
-
-	var windDir = currentWeather.wind.deg;
-	var setDirection = document.getElementById('direction');
-	var direction;
-	if ((windDir >= 0 && windDir <= 22.5) || (windDir <= 360 && windDir >= 337.5)){
-		direction = "North";
-	} else if (windDir > 22.5 && windDir < 67.5) {
-		direction = "North East";
-	} else if (windDir > 67.5 && windDir < 112.5) {
-		direction = "East";
-	} else if (windDir > 112.5 && windDir < 157.5) {
-		direction = "South East";
-	} else if (windDir > 157.5 && windDir < 202.5) {
-		direction = "South";
-	} else if (windDir > 202.5 && windDir < 247.5) {
-		direction = "South West";
-	} else if (windDir > 247.5 && windDir < 292.5) {
-		direction = "West";
-	} else  {
-		direction = "North West";
-	}
-	//setDirection.innerHTML = " blowing " + direction;
-
 	var weather = document.getElementById('weather');
 	weather.innerHTML = "Looks like " + currentWeather.weather[0].description;
 	//finds wind chill and displays
@@ -220,21 +143,7 @@ function getWeather() {
 	windChill.innerHTML = 'Feels like ' + currentWindChill + '&#176';
 	*/
 }
-
-function findLocation() {
-	currentLocation = JSON.parse(geo.responseText);
-	var town =  currentLocation.results[0].locations[0].adminArea5;
-	var city = currentLocation.results[0].locations[0].adminArea3;
-	if (town.length > 15) {
-		town = town.substring(0,15);
-		var location = town + "..." + ', ' + city;
-	} else {
-		var location = town + ', ' + city;
-	}
-	return location;
-}
 var xhttp2;
-
 function getLocationForecast(lat, lon) {
 	var data;
 	xhttp2 = new XMLHttpRequest();
@@ -245,16 +154,13 @@ function getLocationForecast(lat, lon) {
 function getForecast() {
 	currentForecast = JSON.parse(xhttp2.responseText);
 	console.log(currentForecast);
-
 	list = currentForecast.list;
 		//loop through the 5 day forecast
 	for (var i = 0; i < 5; i++) {
 		//display date for forecasts this doens't work as the APIs don't have any dates that can be used. Will have to increment manually
-
 		var forecastDay = list[i].dt;
 		var day = document.getElementsByClassName("day");
-		day[i].innerHTML += findDate(i);
-
+		day[i].innerHTML += findDate();
 		/*
 		Determine which images to display for projected weather
 		determine background color for each card
@@ -291,35 +197,29 @@ function getForecast() {
 		}else { //default screen response if I don't know have an animation for the weather
 			layer[i].classList.add('defaultWeather');
 		}
-
 		//get the high temperatures for each day, put them in
 		var highTemp = Math.ceil((list[i].main.temp_max * (9/5)) - 459.67);
 		var high = document.getElementsByClassName("high");
 		high[i].innerHTML += highTemp + '&#176';
-
 		//get the lows for each day, put them in
-		var lowTemp = Math.floor((list[i].main.temp_min * (9/5)) - 459.67); var low =
-		document.getElementsByClassName("low"); low[i].innerHTML += lowTemp +'&#176'; } }
-
-		//finds the date since that isn't part of the api anymore
+		var lowTemp = Math.floor((list[i].main.temp_min * (9/5)) - 459.67);
+		var low = document.getElementsByClassName("low");
+		low[i].innerHTML += lowTemp + '&#176';
+	}
+}
 function findDate(i, length) {
-		var d = new Date();
-		var date = d.getDate();//gets the number date
-		var days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-		var day;
-		//So I think I have a really shaky workaround
-		if (d.getDay() == 6) {
-			 day = days[d.getDay()];
-		}else {
-			day = days[d.getDay()+i];
-		} while (d.getDay()+i > 6) {
-			day = days[0];
-				for (var j = 0; j < i; j++){
-					day = days[0+j];
-				}
-			i=0;
+	var d = new Date();
+	var date = d.getDate();//gets the number date
+	var days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+	var day;
+	for (var i = 0; i < days.length; i++) {
+		day = days[d.getDay()+i];//gets the name day
+		var j = 0;
+		if ((d.getDay()+i)>6) {
+			j = j+1;
+			day = days[0+j]
 		}
-
+	}
 	var months = ["Jan",'Feb','Mar','Apr','May','June','July','Aug','Sep','Oct','Nov','Dec'];
 	var month = months[d.getMonth()];
 	var year = d.getFullYear();
@@ -342,6 +242,17 @@ function makeWind(classNum) {
 	svg.appendChild(path);
 	return svg;
 }
+//has to be called for each layer that exists, taking layer index
+//would like to not do that, but it slims down html a lot
+function addLayer(animLayer, length) {
+	var animationLayer = document.getElementsByClassName('animation');
+	var div = [ ];
+	for (var j = 0; j < length; j++) {
+		div.push(document.createElement('div'));
+		div[j].setAttribute('class', 'layer'+j);
+		animationLayer[animLayer].appendChild(div[j]);
+	}
+}
 //create lightning bolt
 function makeLightning(classNum){
 	var svg = document.createElementNS("http://www.w3.org/2000/svg",'svg');
@@ -359,40 +270,31 @@ function makeLightning(classNum){
 	}
 	return svg;
 }
-
 var theButton = document.getElementById("toggleBox");
 theButton.addEventListener("click", animate);
-
-//this function does a lot and feels repetitive, could probably be shortened
 function animate() {
 	var topBar = document.getElementById("top");
 	var middleBar = document.getElementById("middle");
 	var bottomBar = document.getElementById("bottom");
 	var nav = document.getElementById('nav');
-
 	if (topBar.className == "thingy noAnimation") {
 		topBar.classList.add("topMoveForward");
 		middleBar.classList.add("middleMoveForward");
 		bottomBar.classList.add("bottomMoveForward");
-
 		topBar.classList.remove("noAnimation");
 		middleBar.classList.remove("noAnimation");
 		bottomBar.classList.remove("noAnimation");
-
 		nav.classList.remove('hidden');
 		nav.classList.add('animate');
 	} else {
 		topBar.classList.add("topMoveBack");
 		middleBar.classList.add("middleMoveBack");
 		bottomBar.classList.add("bottomMoveBack");
-
 		topBar.classList.remove("topMoveForward");
 		middleBar.classList.remove("middleMoveForward");
 		bottomBar.classList.remove("bottomMoveForward");
-
 		nav.classList.remove('animate');
 		nav.classList.add('hideNav');
-
 		setTimeout(function() {
 			topBar.className = "thingy noAnimation";
 			middleBar.className = "thingy noAnimation";

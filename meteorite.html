@@ -4,6 +4,9 @@
 	<title>Meteorite Landings</title>
 <link rel="stylesheet" type="text/css" href="style.css" />
 <link rel="stylesheet" type="text/css" href="navStyle.css" />
+<script src="jquery-3.2.1.min.js" ></script>
+<script src="jquery-ui/jquery-ui.min.js" ></script>
+<script src="jquery-ui/external/jquery/jquery.floatThead.min.js" ></script>
 </head>
 <body>
 <span id="topBar">Meteorite
@@ -15,22 +18,26 @@
 </span>
 <div class="frame">
 	<div class="hidden nav" id="nav">
-		<a href=""><span class="navElement" id="element1">About</span></a>
-		<a href="weather.html"><span class="navElement" id="element2">Weather</span></a>
+		<div id="navSlot1"><a href=""><span class="navElement" id="element1">About</span></a></div>
+		<div id="navSlot2"><a href="weather.html"><span class="navElement" id="element2">Weather</span></a></div>
 	</div>
 </div>
 <div class="container">
 	<div class="rangeBox">
+		Find Meteorite landings within
 		<select id="select" onchange="findMeteorites(this.value)">
 			<option value="">Select a range</option>
 			<option value=100>100 Miles</option>
 			<option value=250>250 Miles</option>
 			<option value=500>500 Miles</option>
 		</select>
-		<!--<button class="button" type='button' onclick='findMeteorites()'>Submit</button>-->
 	</div>
 	<div class="tableContainer">
 		<table id='table' style='width:100%'>
+			<thead id='thead'>
+			</thead>
+			<tbody id='tbody'>
+			</tbody>
 		</table>
 	</div>
 </div>
@@ -49,7 +56,9 @@ function success(pos) {
 }
 
 function error(er) {
-
+	lat1 = 40;
+	lon1 = -70;
+	console.log("It helps if you enable location services! Don't worry, nothing sinister will happen.")
 }
 
 navigator.geolocation.getCurrentPosition(success, error, options);
@@ -86,14 +95,14 @@ function findMeteorites() {
 				Math.sin(dLon/2) * Math.sin(dLon/2);
 			var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
 			var d = R * c;
-			var table = document.getElementById('table');
+			var tbody = document.getElementById('tbody');
 
 			if(d < range) {
 				d = Math.floor(d);
 				var date = data[i].year.substring(0,4);
 				console.log("The " + data[i].name + " Meteorite landed " + d + " miles away in " + date);
 
-				table.appendChild(createRow(data[i].name,data[i].mass,date,d));
+				tbody.appendChild(createRow(data[i].name,(data[i].mass/1000).toFixed(2),date,d));
 			}
 		}
 	}
@@ -103,6 +112,7 @@ function toRad(Value) {
     /** Converts numeric degrees to radians */
     return Value * Math.PI / 180;
 }
+
 function createHead() {
 	var tr = document.createElement('tr');
 
@@ -114,14 +124,15 @@ function createHead() {
 	tr.setAttribute('class','tr');
 
 	th[0].innerHTML = 'Name';
-	th[1].innerHTML = 'Mass (grams)';
+	th[1].innerHTML = 'Mass (kg)';
 	th[2].innerHTML = 'Year';
 	th[3].innerHTML = 'Distance (miles)';
 
 	for (var i = 0; i < th.length; i++) {
-		tr.appendChild(th[i]);
+		//thead.appendChild(tr);
+		tr.append(th[i]);
 	}
-	document.getElementById('table').appendChild(tr);
+	$('#thead').append(tr);
 }
 function createRow(name, mass, year, distance){
 	var tr = document.createElement('tr');
@@ -130,7 +141,6 @@ function createRow(name, mass, year, distance){
 				document.createElement('td'),
 				document.createElement('td'),
 				document.createElement('td') ];
-
 	tr.setAttribute('class','tr');
 
 	td[0].innerHTML = name;
@@ -145,14 +155,14 @@ function createRow(name, mass, year, distance){
 	return tr;
 }
 function removeRow() {
-	var tr = document.getElementsByClassName('tr');
-	while (tr.length > 0) {
+	//var tr = document.getElementsByClassName('tr');
+	while ($('.tr').length > 0) {
 		table.deleteRow(0);
 	}
 }
 
-var theButton = document.getElementById("toggleBox");
-theButton.addEventListener("click", animate);
+
+$('#toggleBox').bind("click", animate);
 
 function animate() {
 	var topBar = document.getElementById("top");

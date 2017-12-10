@@ -134,5 +134,13 @@ a {
 	text-align:center;
 	font-size:40pt;
 }
+/*#navSlot1 {
+	top:80px;
+	position:relative;
+}
+#navSlot2 {
+	top:120px;
+	position:relative;
+}*/
 #element1 {top:10%; }
 #element2 {top:20%; }

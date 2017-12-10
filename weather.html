@@ -15,8 +15,8 @@
 </span>
 <div class="frame">
 	<div class="hidden nav" id="nav">
-		<a href=""><span class="navElement" id="element1">About</span></a>
-		<a href="meteorite.html"><span class="navElement" id="element2">Meteorites</span></a>
+		<div id="navSlot1"><a href=""><span class="navElement" id="element1">About</span></a></div>
+		<div id="navSlot2"><a href="meteorite.html"><span class="navElement" id="element2">Meteorites</span></a></div>
 	</div>
 </div>
 <div class="wrapper">
@@ -71,7 +71,8 @@
 	</div>
 </div>
 <script>
-
+var lat;
+var lon;
 var options = {
   enableHighAccuracy: true,
   timeout: 5000,
@@ -79,8 +80,8 @@ var options = {
 }
 function success(pos) {
 	var crd = pos.coords;
-	var lat = crd.latitude;
-	var lon = crd.longitude
+	lat = crd.latitude;
+	lon = crd.longitude
 
 	console.log(lat);
 	console.log(lon);
@@ -90,7 +91,15 @@ function success(pos) {
 }
 
 function error(er) {
+	console.log(er);
+	console.log("It helps if you give a location, now I have to make one up");
 
+	// I know this is a terrible way to handle errors, but I feel the most common issue will be people denying location access
+	lat = 40;
+	lon = -70;
+	getLocationWeather(lat, lon);
+	getLocationForecast(lat, lon);
+	getLocationName(lat, lon);
 }
 navigator.geolocation.getCurrentPosition(success, error, options);
 
@@ -99,7 +108,7 @@ var xhttp1;//for getting current location weather
 function getLocationWeather(lat, lon){
 	var data;
 	xhttp1 = new XMLHttpRequest();
-	xhttp1.addEventListener("load", parseWeather);
+	xhttp1.addEventListener("load", getWeather);
 	xhttp1.open("GET", "http://api.openweathermap.org/data/2.5/weather?lat="+lat+"&lon="+lon+"&APPID=29bb226f726114879207742f5261bfad");
 	xhttp1.send();
 }
@@ -120,14 +129,9 @@ function findLocation() {
 	return location;
 }
 
-var currentWeather;
-
-function parseWeather() {
-	currentWeather = JSON.parse(xhttp1.responseText);
-}
 function getWeather(e) {
+	var currentWeather = JSON.parse(xhttp1.responseText);
 	console.log(currentWeather); //use as a reference to look into api
-
 	//add layers, first number is animation layer (so forecast day), last number is number of layers to make
 	addLayer(0, 10);
 	addLayer(1, 10);
@@ -189,17 +193,67 @@ function getForecast() {
 		*/
 		var weather = list[i].weather[0].description;
 		var layer = document.getElementsByClassName("animation");
+		switch(weather) {
+			case "few clouds":
+				layer[i].classList.add("partly");
+				layer[i].appendChild(makeWind('breeze1')); //add some wind
+				break;
+			case "broken clouds":
+				layer[i].classList.add("partly");
+				layer[i].appendChild(makeWind('breeze1')); //add some wind
+				break;
+			case "clear sky":
+				layer[i].classList.add("sunny");
+				break;
+			case "overcast clouds":
+				layer[i].classList.add("cloudy");
+				layer[i].appendChild(makeWind('breeze1')); //add some wind
+				layer[i].appendChild(makeWind('breeze2')); //add some wind
+				break;
+			case "scattered clouds":
+				layer[i].classList.add("cloudy");
+				layer[i].appendChild(makeWind('breeze1')); //add some wind
+				layer[i].appendChild(makeWind('breeze2')); //add some wind
+				break;
+			case "moderate rain":
+				layer[i].classList.add("rainy");
+				break;
+			case "light rain":
+				layer[i].classList.add('lightRain');
+				break;
+			case "light snow":
+				layer[i].classList.add('lightSnow');
+				break;
+			case "heavy snow":
+					layer[i].classList.add('snow');
+					break;
+			case "thunderstorms":
+				layer[i].classList.add('rainy');
+				layer[i].insertBefore(makeLightning('lightning1'), layer[i].childNodes[0]); //add lightning as the first child of the layer[i]
+				layer[i].insertBefore(makeLightning('lightning2'), layer[i].childNodes[0]); //add lightning as the first child of the layer[i]
+				layer[i].insertBefore(makeLightning('lightning3'), layer[i].childNodes[0]); //add lightning as the first child of the layer[i]
+				break;
+			case "scattered thunderstorms":
+				layer[i].classList.add('rainy');
+				layer[i].insertBefore(makeLightning('lightning1'), layer[i].childNodes[0]); //add lightning as the first child of the layer[i]
+				layer[i].insertBefore(makeLightning('lightning2'), layer[i].childNodes[0]); //add lightning as the first child of the layer[i]
+				break;
+			default:
+				layer[i].classList.add('defaultWeather');
+		}
+/*
 		if (weather == "few clouds" || weather == "broken clouds") { //set class for partly cloudy/sunny
 			layer[i].classList.add("partly");
 			layer[i].appendChild(makeWind('breeze1')); //add some wind
-		}else if (weather == "Clouds" || weather  == "Mostly Cloudy"|| weather == "scattered clouds") { //set class for cloudy/mostly cloudy
+		}else if (weather == "overcast clouds" || weather == "scattered clouds") { //set class for cloudy/mostly cloudy
 			layer[i].classList.add("cloudy");
 			layer[i].appendChild(makeWind('breeze1')); //add some wind
+			layer[i].appendChild(makeWind('breeze2')); //add some wind
 		} else if (weather == "clear sky") { //set class for sunny
 			layer[i].classList.add("sunny");
 		}else if (weather == "moderate rain") { //set class for normal rain
 			layer[i].classList.add("rainy");
-		}else if (weather == "light rain" || weather == "Showers") { //set class for light rain
+		}else if (weather == "light rain") { //set class for light rain
 			layer[i].classList.add('lightRain');
 		}else if (weather == "Scattered Thunderstorms") { //Scattered thunderstorms, only two bolts
 			layer[i].classList.add('rainy');
@@ -218,7 +272,7 @@ function getForecast() {
 		}else { //default screen response if I don't know have an animation for the weather
 			layer[i].classList.add('defaultWeather');
 		}
-
+*/
 		//get the high temperatures for each day, put them in
 		var highTemp = Math.ceil((list[i].main.temp_max * (9/5)) - 459.67);
 		var high = document.getElementsByClassName("high");
@@ -235,13 +289,7 @@ function findDate(i, length) {
 	var date = d.getDate();//gets the number date
 	var days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 	var day;
-	day = days[d.getDay()+i];
-		while ((d.getDay()+i)>6) {
-			for (var j = 0; j < i; j++) {
-				day = days[0+j]
-			}
-			i=0;
-		}
+	day = days[(d.getDay()+i)%7];
 	var months = ["Jan",'Feb','Mar','Apr','May','June','July','Aug','Sep','Oct','Nov','Dec'];
 	var month = months[d.getMonth()];
 	var year = d.getFullYear();
@@ -253,6 +301,7 @@ function findDate(i, length) {
 	}
 	return total;
 }
+
 //function to create the svg for wind animation
 function makeWind(classNum) {
 	var svg = document.createElementNS("http://www.w3.org/2000/svg",'svg');
@@ -264,7 +313,6 @@ function makeWind(classNum) {
 	svg.appendChild(path);
 	return svg;
 }
-
 //has to be called for each layer that exists, taking layer index
 //would like to not do that, but it slims down html a lot
 function addLayer(animLayer, length) {

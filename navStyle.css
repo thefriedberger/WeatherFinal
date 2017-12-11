@@ -158,17 +158,17 @@ a {
 #element2 {top:20%; }
 @keyframes moveNav1Down {
 	from { top:0px; }
-	to { top:80px;}
+	to { top:70px;}
 }
 @keyframes moveNav2Down {
 	from { top:0px; }
-	to { top:140px;}
+	to { top:130px;}
 }
 @keyframes moveNav1Up {
-	from { top:80px; }
+	from { top:70px; }
 	to { top:0px;}
 }
 @keyframes moveNav2Up {
-	from { top:140px; }
+	from { top:130px; }
 	to { top:0px;}
 }

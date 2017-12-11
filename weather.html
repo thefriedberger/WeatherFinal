@@ -7,6 +7,285 @@
 <script src="jquery-3.2.1.min.js" ></script>
 <script src="jquery-ui/jquery-ui.min.js" ></script>
 <script src="jquery-ui/external/jquery/jquery.floatThead.min.js" ></script>
+<script>
+$(document).ready(function() {
+	var lat;
+	var lon;
+	var options = {
+	  enableHighAccuracy: true,
+	  timeout: 5000,
+	  maximumAge: 0
+	}
+	function success(pos) {
+		var crd = pos.coords;
+		lat = crd.latitude;
+		lon = crd.longitude
+
+		console.log(lat);
+		console.log(lon);
+		getLocationWeather(lat, lon);
+		getLocationForecast(lat, lon);
+		getLocationName(lat, lon);
+	}
+
+	function error(er) {
+		console.log(er);
+		console.log("It helps if you give a location, now I have to make one up");
+
+		// I know this is a terrible way to handle errors, but I feel the most common issue will be people denying location access
+		lat = 40;
+		lon = -70;
+		getLocationWeather(lat, lon);
+		getLocationForecast(lat, lon);
+		getLocationName(lat, lon);
+	}
+	navigator.geolocation.getCurrentPosition(success, error, options);
+
+	var xhttp1;//for getting current location weather
+
+	function getLocationWeather(lat, lon){
+		var data;
+		xhttp1 = new XMLHttpRequest();
+		xhttp1.addEventListener("load", getWeather);
+		xhttp1.open("GET", "http://api.openweathermap.org/data/2.5/weather?lat="+lat+"&lon="+lon+"&APPID=29bb226f726114879207742f5261bfad");
+		xhttp1.send();
+	}
+
+	var geo; //for getting current location name (city/town)
+
+	function getLocationName(lat, lon) {
+		var data;
+		geo = new XMLHttpRequest();
+		geo.addEventListener("load", getWeather);
+		geo.open("GET", "http://open.mapquestapi.com/geocoding/v1/reverse?key=C9ml1AscuDGhkLOtfoKQvTUYXbNlaauw&location="+lat+","+lon);
+		geo.send();
+	}
+
+	function findLocation() {
+		currentLocation = JSON.parse(geo.responseText);
+		var location =  currentLocation.results[0].locations[0].adminArea5 + ', ' + currentLocation.results[0].locations[0].adminArea3;
+		return location;
+	}
+
+	function getWeather(e) {
+		var currentWeather = JSON.parse(xhttp1.responseText);
+		console.log(currentWeather); //use as a reference to look into api
+		//add layers, first number is animation layer (so forecast day), last number is number of layers to make
+		addLayer(0, 10);
+		addLayer(1, 10);
+		addLayer(2, 10);
+		addLayer(3, 10);
+		addLayer(4, 10);
+			//finds the current temp and displays it
+		var temp = document.getElementById("temp");
+		temp.innerHTML = Math.floor((currentWeather.main.temp * (9/5)) - 459.67) + '&#176';
+
+		var date = document.getElementById('date');
+		date.innerHTML = findDate(0,"full");
+		//finds current location and displays it
+		var location = document.getElementById("location");
+		myLocation = findLocation();
+		location.innerHTML = myLocation;
+
+		//finds current wind speed and displays it
+		var windSpeed = document.getElementById("speed");
+		var speed = currentWeather.wind.speed
+		windSpeed.innerHTML = Math.ceil(speed);
+
+		var weather = document.getElementById('weather');
+		weather.innerHTML = "Looks like " + currentWeather.weather[0].description;
+	}
+	var xhttp2;
+
+	function getLocationForecast(lat, lon) {
+		var data;
+		xhttp2 = new XMLHttpRequest();
+		xhttp2.addEventListener("load", getForecast);
+		xhttp2.open("GET", "http://api.openweathermap.org/data/2.5/forecast?lat="+lat+"&lon="+lon+"&APPID=29bb226f726114879207742f5261bfad");
+		xhttp2.send();
+	}
+	function getForecast() {
+		currentForecast = JSON.parse(xhttp2.responseText);
+		console.log(currentForecast);
+
+		list = currentForecast.list;
+			//loop through the 5 day forecast
+		for (var i = 0; i < 5; i++) {
+			//display date for forecasts this doens't work as the APIs don't have any dates that can be used. Will have to increment manually
+
+			var forecastDay = list[i].dt;
+			var day = document.getElementsByClassName("day");
+			day[i].innerHTML += findDate(i);
+
+			/*
+			Determine which images to display for projected weather
+			determine background color for each card
+			use this to apply animation, but might externalize the drawing as it's getting crowded
+			*/
+			var weather = list[i].weather[0].description;
+			var layer = document.getElementsByClassName("animation");
+			switch(weather) {
+				case "few clouds":
+					layer[i].classList.add("partly");
+					layer[i].appendChild(makeWind('breeze1')); //add some wind
+					break;
+				case "broken clouds":
+					layer[i].classList.add("partly");
+					layer[i].appendChild(makeWind('breeze1')); //add some wind
+					break;
+				case "clear sky":
+					layer[i].classList.add("sunny");
+					break;
+				case "overcast clouds":
+					layer[i].classList.add("cloudy");
+					layer[i].appendChild(makeWind('breeze1')); //add some wind
+					layer[i].appendChild(makeWind('breeze2')); //add some wind
+					break;
+				case "scattered clouds":
+					layer[i].classList.add("cloudy");
+					layer[i].appendChild(makeWind('breeze1')); //add some wind
+					layer[i].appendChild(makeWind('breeze2')); //add some wind
+					break;
+				case "moderate rain":
+					layer[i].classList.add("rainy");
+					break;
+				case "light rain":
+					layer[i].classList.add('lightRain');
+					break;
+				case "light snow":
+					layer[i].classList.add('lightSnow');
+					break;
+				case "heavy snow":
+						layer[i].classList.add('snow');
+						break;
+				case "thunderstorms":
+					layer[i].classList.add('rainy');
+					layer[i].insertBefore(makeLightning('lightning1'), layer[i].childNodes[0]); //add lightning as the first child of the layer[i]
+					layer[i].insertBefore(makeLightning('lightning2'), layer[i].childNodes[0]); //add lightning as the first child of the layer[i]
+					layer[i].insertBefore(makeLightning('lightning3'), layer[i].childNodes[0]); //add lightning as the first child of the layer[i]
+					break;
+				case "scattered thunderstorms":
+					layer[i].classList.add('rainy');
+					layer[i].insertBefore(makeLightning('lightning1'), layer[i].childNodes[0]); //add lightning as the first child of the layer[i]
+					layer[i].insertBefore(makeLightning('lightning2'), layer[i].childNodes[0]); //add lightning as the first child of the layer[i]
+					break;
+				default:
+					layer[i].classList.add('defaultWeather');
+			}
+			//get the high temperatures for each day, put them in
+			var highTemp = Math.ceil((list[i].main.temp_max * (9/5)) - 459.67);
+			var high = document.getElementsByClassName("high");
+			high[i].innerHTML += highTemp + '&#176';
+
+			//get the lows for each day, put them in
+			var lowTemp = Math.floor((list[i].main.temp_min * (9/5)) - 459.67);
+			var low = document.getElementsByClassName("low");
+			low[i].innerHTML += lowTemp + '&#176';
+		}
+	}
+	function findDate(i, length) {
+		var d = new Date();
+		var date = d.getDate();//gets the number date
+		var days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+		var day;
+		day = days[(d.getDay()+i)%7];
+		var months = ["Jan",'Feb','Mar','Apr','May','June','July','Aug','Sep','Oct','Nov','Dec'];
+		var month = months[d.getMonth()];
+		var year = d.getFullYear();
+		var total;
+		if(length == "full") {
+			total = day + ", " + " " + date +" " + month + " " + year;
+		}else{
+			total = day;
+		}
+		return total;
+	}
+
+	//function to create the svg for wind animation
+	function makeWind(classNum) {
+		var svg = document.createElementNS("http://www.w3.org/2000/svg",'svg');
+		var path = document.createElementNS("http://www.w3.org/2000/svg",'path');
+		svg.classList.add('breeze');
+		svg.classList.add(classNum);
+		svg.setAttribute('viewBox','0 0 100 100');
+		path.setAttribute('d','M0,50 C0,50 20,20 40,15 C60,10 76,15 80,30 C80,40 60,45 55,35 C55,25 65,23 75,20 C85,20 95,25 100,28');
+		svg.appendChild(path);
+		return svg;
+	}
+	//has to be called for each layer that exists, taking layer index
+	//would like to not do that, but it slims down html a lot
+	function addLayer(animLayer, length) {
+		var animationLayer = document.getElementsByClassName('animation');
+		var div = [ ];
+		for (var j = 0; j < length; j++) {
+			div.push(document.createElement('div'));
+			div[j].setAttribute('class', 'layer'+j);
+			animationLayer[animLayer].appendChild(div[j]);
+		}
+	}
+	//create lightning bolt
+	function makeLightning(classNum){
+		var svg = document.createElementNS("http://www.w3.org/2000/svg",'svg');
+		var poly = [ document.createElementNS("http://www.w3.org/2000/svg",'polygon'),
+					 document.createElementNS("http://www.w3.org/2000/svg",'polygon'),
+					 document.createElementNS("http://www.w3.org/2000/svg",'polygon') ];
+		svg.classList.add("lightning");
+		svg.classList.add(classNum);
+		svg.setAttribute('viewBox', '0 0 100 100');
+		poly[0].setAttribute('points',"60,10 80, 10 40,60 30,60");
+		poly[1].setAttribute('points',"45,60 35,60 15,100 20,100");
+		poly[2].setAttribute('points',"28,100 17,100 0,140");
+		for (var i = 0; i < poly.length; i++) {
+			svg.appendChild(poly[i]);
+		}
+		return svg;
+	}
+	$('#toggleBox').bind("click", animate);
+
+	function animate() {
+		if ($('#top').hasClass("thingy noAnimation")) {
+			$('#top').removeClass("noAnimation").addClass("topMoveForward");
+			$('#middle').removeClass("noAnimation").addClass("middleMoveForward");
+			$('#bottom').removeClass("noAnimation").addClass("bottomMoveForward");
+			$('#navSlot1').removeClass("moveNav1Up").addClass("moveNav1Down");
+			$('#navSlot2').removeClass("moveNav2Up").addClass("moveNav2Down");
+
+			$('#nav').removeClass('hidden');
+			$('#nav').addClass('animate');
+		} else {
+			$('#top').removeClass("topMoveForward").addClass("topMoveBack");
+			$('#middle').removeClass("middleMoveForward").addClass("middleMoveBack");
+			$('#bottom').removeClass("bottomMoveForward").addClass("bottomMoveBack");
+			$('#navSlot1').addClass("moveNav1Up").removeClass("moveNav1Down");
+			$('#navSlot2').addClass("moveNav2Up").removeClass("moveNav2Down");
+
+			$('#nav').removeClass('animate');
+			$('#nav').addClass('hideNav');
+
+			setTimeout(function() {
+				$('#top').removeClass('topMoveBack').addClass("thingy noAnimation");
+				$('#middle').removeClass('middleMoveBack').addClass("thingy noAnimation");
+				$('#bottom').removeClass('bottomMoveBack').addClass("thingy noAnimation");
+				$('#nav').removeClass('hideNav');
+				$('#nav').addClass('hidden');
+			},1000);
+		}
+	}
+	//eventListener to flip the card
+
+	$('#card').bind('click', flip);
+	function flip() {
+		if ($('#card').hasClass("card noAnimation")) {
+			$('#card').removeClass('noAnimation reverseFlip').addClass("cardFlip");
+		} else {
+			$('#card').removeClass('cardFlip').addClass("reverseFlip");
+			setTimeout(function () {
+				$('#card').removeClass('reverseFlip').addClass("noAnimation");
+			},1000);
+		}
+	}
+});
+</script>
 </head>
 <body>
 <span id="topBar">Weather
@@ -74,321 +353,6 @@
 	</div>
 </div>
 <script>
-var lat;
-var lon;
-var options = {
-  enableHighAccuracy: true,
-  timeout: 5000,
-  maximumAge: 0
-}
-function success(pos) {
-	var crd = pos.coords;
-	lat = crd.latitude;
-	lon = crd.longitude
-
-	console.log(lat);
-	console.log(lon);
-	getLocationWeather(lat, lon);
-	getLocationForecast(lat, lon);
-	getLocationName(lat, lon);
-}
-
-function error(er) {
-	console.log(er);
-	console.log("It helps if you give a location, now I have to make one up");
-
-	// I know this is a terrible way to handle errors, but I feel the most common issue will be people denying location access
-	lat = 40;
-	lon = -70;
-	getLocationWeather(lat, lon);
-	getLocationForecast(lat, lon);
-	getLocationName(lat, lon);
-}
-navigator.geolocation.getCurrentPosition(success, error, options);
-
-var xhttp1;//for getting current location weather
-
-function getLocationWeather(lat, lon){
-	var data;
-	xhttp1 = new XMLHttpRequest();
-	xhttp1.addEventListener("load", getWeather);
-	xhttp1.open("GET", "http://api.openweathermap.org/data/2.5/weather?lat="+lat+"&lon="+lon+"&APPID=29bb226f726114879207742f5261bfad");
-	xhttp1.send();
-}
-
-var geo; //for getting current location name (city/town)
-
-function getLocationName(lat, lon) {
-	var data;
-	geo = new XMLHttpRequest();
-	geo.addEventListener("load", getWeather);
-	geo.open("GET", "http://open.mapquestapi.com/geocoding/v1/reverse?key=C9ml1AscuDGhkLOtfoKQvTUYXbNlaauw&location="+lat+","+lon);
-	geo.send();
-}
-
-function findLocation() {
-	currentLocation = JSON.parse(geo.responseText);
-	var location =  currentLocation.results[0].locations[0].adminArea5 + ', ' + currentLocation.results[0].locations[0].adminArea3;
-	return location;
-}
-
-function getWeather(e) {
-	var currentWeather = JSON.parse(xhttp1.responseText);
-	console.log(currentWeather); //use as a reference to look into api
-	//add layers, first number is animation layer (so forecast day), last number is number of layers to make
-	addLayer(0, 10);
-	addLayer(1, 10);
-	addLayer(2, 10);
-	addLayer(3, 10);
-	addLayer(4, 10);
-		//finds the current temp and displays it
-	var temp = document.getElementById("temp");
-	temp.innerHTML = Math.floor((currentWeather.main.temp * (9/5)) - 459.67) + '&#176';
-
-	var date = document.getElementById('date');
-	date.innerHTML = findDate(0,"full");
-	//finds current location and displays it
-	var location = document.getElementById("location");
-	myLocation = findLocation();
-	location.innerHTML = myLocation;
-
-	//finds current wind speed and displays it
-	var windSpeed = document.getElementById("speed");
-	var speed = currentWeather.wind.speed
-	windSpeed.innerHTML = Math.ceil(speed);
-
-	var weather = document.getElementById('weather');
-	weather.innerHTML = "Looks like " + currentWeather.weather[0].description;
-	//finds wind chill and displays
-	/*
-	var currentWindChill = channel.wind.chill;
-	var windChill = document.getElementById("chill");
-	windChill.innerHTML = 'Feels like ' + currentWindChill + '&#176';
-	*/
-
-}
-var xhttp2;
-
-function getLocationForecast(lat, lon) {
-	var data;
-	xhttp2 = new XMLHttpRequest();
-	xhttp2.addEventListener("load", getForecast);
-	xhttp2.open("GET", "http://api.openweathermap.org/data/2.5/forecast?lat="+lat+"&lon="+lon+"&APPID=29bb226f726114879207742f5261bfad");
-	xhttp2.send();
-}
-function getForecast() {
-	currentForecast = JSON.parse(xhttp2.responseText);
-	console.log(currentForecast);
-
-	list = currentForecast.list;
-		//loop through the 5 day forecast
-	for (var i = 0; i < 5; i++) {
-		//display date for forecasts this doens't work as the APIs don't have any dates that can be used. Will have to increment manually
-
-		var forecastDay = list[i].dt;
-		var day = document.getElementsByClassName("day");
-		day[i].innerHTML += findDate(i);
-
-		/*
-		Determine which images to display for projected weather
-		determine background color for each card
-		use this to apply animation, but might externalize the drawing as it's getting crowded
-		*/
-		var weather = list[i].weather[0].description;
-		var layer = document.getElementsByClassName("animation");
-		switch(weather) {
-			case "few clouds":
-				layer[i].classList.add("partly");
-				layer[i].appendChild(makeWind('breeze1')); //add some wind
-				break;
-			case "broken clouds":
-				layer[i].classList.add("partly");
-				layer[i].appendChild(makeWind('breeze1')); //add some wind
-				break;
-			case "clear sky":
-				layer[i].classList.add("sunny");
-				break;
-			case "overcast clouds":
-				layer[i].classList.add("cloudy");
-				layer[i].appendChild(makeWind('breeze1')); //add some wind
-				layer[i].appendChild(makeWind('breeze2')); //add some wind
-				break;
-			case "scattered clouds":
-				layer[i].classList.add("cloudy");
-				layer[i].appendChild(makeWind('breeze1')); //add some wind
-				layer[i].appendChild(makeWind('breeze2')); //add some wind
-				break;
-			case "moderate rain":
-				layer[i].classList.add("rainy");
-				break;
-			case "light rain":
-				layer[i].classList.add('lightRain');
-				break;
-			case "light snow":
-				layer[i].classList.add('lightSnow');
-				break;
-			case "heavy snow":
-					layer[i].classList.add('snow');
-					break;
-			case "thunderstorms":
-				layer[i].classList.add('rainy');
-				layer[i].insertBefore(makeLightning('lightning1'), layer[i].childNodes[0]); //add lightning as the first child of the layer[i]
-				layer[i].insertBefore(makeLightning('lightning2'), layer[i].childNodes[0]); //add lightning as the first child of the layer[i]
-				layer[i].insertBefore(makeLightning('lightning3'), layer[i].childNodes[0]); //add lightning as the first child of the layer[i]
-				break;
-			case "scattered thunderstorms":
-				layer[i].classList.add('rainy');
-				layer[i].insertBefore(makeLightning('lightning1'), layer[i].childNodes[0]); //add lightning as the first child of the layer[i]
-				layer[i].insertBefore(makeLightning('lightning2'), layer[i].childNodes[0]); //add lightning as the first child of the layer[i]
-				break;
-			default:
-				layer[i].classList.add('defaultWeather');
-		}
-/*
-		if (weather == "few clouds" || weather == "broken clouds") { //set class for partly cloudy/sunny
-			layer[i].classList.add("partly");
-			layer[i].appendChild(makeWind('breeze1')); //add some wind
-		}else if (weather == "overcast clouds" || weather == "scattered clouds") { //set class for cloudy/mostly cloudy
-			layer[i].classList.add("cloudy");
-			layer[i].appendChild(makeWind('breeze1')); //add some wind
-			layer[i].appendChild(makeWind('breeze2')); //add some wind
-		} else if (weather == "clear sky") { //set class for sunny
-			layer[i].classList.add("sunny");
-		}else if (weather == "moderate rain") { //set class for normal rain
-			layer[i].classList.add("rainy");
-		}else if (weather == "light rain") { //set class for light rain
-			layer[i].classList.add('lightRain');
-		}else if (weather == "Scattered Thunderstorms") { //Scattered thunderstorms, only two bolts
-			layer[i].classList.add('rainy');
-			layer[i].insertBefore(makeLightning('lightning1'), layer[i].childNodes[0]); //add lightning as the first child of the layer[i]
-			layer[i].insertBefore(makeLightning('lightning2'), layer[i].childNodes[0]); //add lightning as the first child of the layer[i]
-		}else if (weather == "Thunderstorms") { //I hope that's how they refer to normal thunderstorms
-			layer[i].classList.add('rainy');
-			layer[i].insertBefore(makeLightning('lightning1'), layer[i].childNodes[0]); //add lightning as the first child of the layer[i]
-			layer[i].insertBefore(makeLightning('lightning2'), layer[i].childNodes[0]); //add lightning as the first child of the layer[i]
-			layer[i].insertBefore(makeLightning('lightning3'), layer[i].childNodes[0]); //add lightning as the first child of the layer[i]
-		}else if (weather == "Breezy" ) { //set class for breezy
-			layer[i].classList.add("breezy");
-			layer[i].appendChild(makeWind('breeze1')); //add some wind
-			layer[i].appendChild(makeWind('breeze2'));
-			layer[i].appendChild(makeWind('breeze3'));
-		}else { //default screen response if I don't know have an animation for the weather
-			layer[i].classList.add('defaultWeather');
-		}
-*/
-		//get the high temperatures for each day, put them in
-		var highTemp = Math.ceil((list[i].main.temp_max * (9/5)) - 459.67);
-		var high = document.getElementsByClassName("high");
-		high[i].innerHTML += highTemp + '&#176';
-
-		//get the lows for each day, put them in
-		var lowTemp = Math.floor((list[i].main.temp_min * (9/5)) - 459.67);
-		var low = document.getElementsByClassName("low");
-		low[i].innerHTML += lowTemp + '&#176';
-	}
-}
-function findDate(i, length) {
-	var d = new Date();
-	var date = d.getDate();//gets the number date
-	var days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-	var day;
-	day = days[(d.getDay()+i)%7];
-	var months = ["Jan",'Feb','Mar','Apr','May','June','July','Aug','Sep','Oct','Nov','Dec'];
-	var month = months[d.getMonth()];
-	var year = d.getFullYear();
-	var total;
-	if(length == "full") {
-		total = day + ", " + " " + date +" " + month + " " + year;
-	}else{
-		total = day;
-	}
-	return total;
-}
-
-//function to create the svg for wind animation
-function makeWind(classNum) {
-	var svg = document.createElementNS("http://www.w3.org/2000/svg",'svg');
-	var path = document.createElementNS("http://www.w3.org/2000/svg",'path');
-	svg.classList.add('breeze');
-	svg.classList.add(classNum);
-	svg.setAttribute('viewBox','0 0 100 100');
-	path.setAttribute('d','M0,50 C0,50 20,20 40,15 C60,10 76,15 80,30 C80,40 60,45 55,35 C55,25 65,23 75,20 C85,20 95,25 100,28');
-	svg.appendChild(path);
-	return svg;
-}
-//has to be called for each layer that exists, taking layer index
-//would like to not do that, but it slims down html a lot
-function addLayer(animLayer, length) {
-	var animationLayer = document.getElementsByClassName('animation');
-	var div = [ ];
-	for (var j = 0; j < length; j++) {
-		div.push(document.createElement('div'));
-		div[j].setAttribute('class', 'layer'+j);
-		animationLayer[animLayer].appendChild(div[j]);
-	}
-}
-//create lightning bolt
-function makeLightning(classNum){
-	var svg = document.createElementNS("http://www.w3.org/2000/svg",'svg');
-	var poly = [ document.createElementNS("http://www.w3.org/2000/svg",'polygon'),
-				 document.createElementNS("http://www.w3.org/2000/svg",'polygon'),
-				 document.createElementNS("http://www.w3.org/2000/svg",'polygon') ];
-	svg.classList.add("lightning");
-	svg.classList.add(classNum);
-	svg.setAttribute('viewBox', '0 0 100 100');
-	poly[0].setAttribute('points',"60,10 80, 10 40,60 30,60");
-	poly[1].setAttribute('points',"45,60 35,60 15,100 20,100");
-	poly[2].setAttribute('points',"28,100 17,100 0,140");
-	for (var i = 0; i < poly.length; i++) {
-		svg.appendChild(poly[i]);
-	}
-	return svg;
-}
-
-$('#toggleBox').bind("click", animate);
-
-function animate() {
-	if ($('#top').hasClass("thingy noAnimation")) {
-		$('#top').removeClass("noAnimation").addClass("topMoveForward");
-		$('#middle').removeClass("noAnimation").addClass("middleMoveForward");
-		$('#bottom').removeClass("noAnimation").addClass("bottomMoveForward");
-		$('#navSlot1').removeClass("moveNav1Up").addClass("moveNav1Down");
-		$('#navSlot2').removeClass("moveNav2Up").addClass("moveNav2Down");
-
-		$('#nav').removeClass('hidden');
-		$('#nav').addClass('animate');
-	} else {
-		$('#top').removeClass("topMoveForward").addClass("topMoveBack");
-		$('#middle').removeClass("middleMoveForward").addClass("middleMoveBack");
-		$('#bottom').removeClass("bottomMoveForward").addClass("bottomMoveBack");
-		$('#navSlot1').addClass("moveNav1Up").removeClass("moveNav1Down");
-		$('#navSlot2').addClass("moveNav2Up").removeClass("moveNav2Down");
-
-		$('#nav').removeClass('animate');
-		$('#nav').addClass('hideNav');
-
-		setTimeout(function() {
-			$('#top').removeClass('topMoveBack').addClass("thingy noAnimation");
-			$('#middle').removeClass('middleMoveBack').addClass("thingy noAnimation");
-			$('#bottom').removeClass('bottomMoveBack').addClass("thingy noAnimation");
-			$('#nav').removeClass('hideNav');
-			$('#nav').addClass('hidden');
-		},1000);
-	}
-}
-//eventListener to flip the card
-var card = document.getElementById("card");
-card.addEventListener('click', flip);
-function flip() {
-	if (card.className == "card noAnimation") {
-		card.className = "card cardFlip";
-	} else {
-		card.className = "card reverseFlip";
-		setTimeout(function () {
-			card.className = "card noAnimation";
-		},1000);
-	}
-}
 </script>
 </body>
 </html>

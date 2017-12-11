@@ -7,6 +7,162 @@
 <script src="jquery-3.2.1.min.js" ></script>
 <script src="jquery-ui/jquery-ui.min.js" ></script>
 <script src="jquery-ui/external/jquery/jquery.floatThead.min.js" ></script>
+<script>
+$(document).ready(function(){
+
+	var options = {
+	  enableHighAccuracy: true,
+	  timeout: 5000,
+	  maximumAge: 0
+	}
+	var lat1;
+	var lon1;
+	function success(pos) {
+		var crd = pos.coords;
+		lat1 = crd.latitude;
+		lon1 = crd.longitude;
+	}
+
+	function error(er) {
+		lat1 = 40;
+		lon1 = -70;
+		console.log("It helps if you enable location services! Don't worry, nothing sinister will happen.")
+	}
+
+	navigator.geolocation.getCurrentPosition(success, error, options);
+
+	var data;
+	var xhttp = new XMLHttpRequest
+	xhttp.addEventListener("load", parseMeteorites);
+	xhttp.open("GET", "https://data.nasa.gov/resource/y77d-th95.json");
+	xhttp.send();
+
+	function parseMeteorites() {
+		data = JSON.parse(xhttp.responseText);
+	}
+	var range
+
+	function findMeteorites() {
+		console.log(data);
+
+		range = document.getElementById('select').value;
+
+		removeRow();
+
+		createHead();
+		for (var i = 0; i < data.length; i++) {
+			if(data[i].hasOwnProperty('geolocation')) {
+				lon2 = data[i].geolocation.coordinates[0];
+				lat2 = data[i].geolocation.coordinates[1];
+
+				var R = 3958.7558657440545; // Radius of earth in Miles
+				var dLat = toRad(lat2-lat1);
+				var dLon = toRad(lon2-lon1);
+				var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+					Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+					Math.sin(dLon/2) * Math.sin(dLon/2);
+				var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+				var d = R * c;
+				var tbody = document.getElementById('tbody');
+
+				if(d < range) {
+					d = Math.floor(d);
+					var date = data[i].year.substring(0,4);
+					console.log("The " + data[i].name + " Meteorite landed " + d + " miles away in " + date);
+
+					tbody.appendChild(createRow(data[i].name,(data[i].mass/1000).toFixed(2),date,d));
+				}
+			}
+		}
+
+	}
+	function toRad(Value) {
+	    /** Converts numeric degrees to radians */
+	    return Value * Math.PI / 180;
+	}
+
+	function createHead() {
+		var tr = document.createElement('tr');
+
+		var th = [  document.createElement('th'),
+					document.createElement('th'),
+					document.createElement('th'),
+					document.createElement('th') ];
+
+		tr.setAttribute('class','tr');
+
+		th[0].innerHTML = 'Name';
+		th[1].innerHTML = 'Mass (kg)';
+		th[2].innerHTML = 'Year';
+		th[3].innerHTML = 'Distance (miles)';
+
+		for (var i = 0; i < th.length; i++) {
+			//thead.appendChild(tr);
+			tr.append(th[i]);
+		}
+		$('#thead').append(tr);
+	}
+	function createRow(name, mass, year, distance){
+		var tr = document.createElement('tr');
+
+		var td = [  document.createElement('td'),
+					document.createElement('td'),
+					document.createElement('td'),
+					document.createElement('td') ];
+		tr.setAttribute('class','tr');
+
+		td[0].innerHTML = name;
+		td[1].innerHTML = mass;
+		td[2].innerHTML = year;
+		td[3].innerHTML= distance;
+
+		for (var i = 0; i < td.length; i++) {
+			tr.appendChild(td[i]);
+		}
+
+		return tr;
+	}
+	function removeRow() {
+		//var tr = document.getElementsByClassName('tr');
+		while ($('.tr').length > 0) {
+			table.deleteRow(0);
+		}
+	}
+
+	//I decided to throw in some jquery, want to get some practice in
+	$('#toggleBox').bind("click", animate);
+
+	function animate() {
+		if ($('#top').hasClass("thingy noAnimation")) {
+			$('#top').removeClass("noAnimation").addClass("topMoveForward");
+			$('#middle').removeClass("noAnimation").addClass("middleMoveForward");
+			$('#bottom').removeClass("noAnimation").addClass("bottomMoveForward");
+			$('#navSlot1').removeClass("moveNav1Up").addClass("moveNav1Down");
+			$('#navSlot2').removeClass("moveNav2Up").addClass("moveNav2Down");
+
+			$('#nav').removeClass('hidden');
+			$('#nav').addClass('animate');
+		} else {
+			$('#top').removeClass("topMoveForward").addClass("topMoveBack");
+			$('#middle').removeClass("middleMoveForward").addClass("middleMoveBack");
+			$('#bottom').removeClass("bottomMoveForward").addClass("bottomMoveBack");
+			$('#navSlot1').addClass("moveNav1Up").removeClass("moveNav1Down");
+			$('#navSlot2').addClass("moveNav2Up").removeClass("moveNav2Down");
+
+			$('#nav').removeClass('animate');
+			$('#nav').addClass('hideNav');
+
+			setTimeout(function() {
+				$('#top').removeClass('topMoveBack').addClass("thingy noAnimation");
+				$('#middle').removeClass('middleMoveBack').addClass("thingy noAnimation");
+				$('#bottom').removeClass('bottomMoveBack').addClass("thingy noAnimation");
+				$('#nav').removeClass('hideNav');
+				$('#nav').addClass('hidden');
+			},1000);
+		}
+	}
+});
+</script>
 </head>
 <body>
 <span id="topBar">Meteorite
@@ -42,157 +198,6 @@
 	</div>
 </div>
 <script>
-var options = {
-  enableHighAccuracy: true,
-  timeout: 5000,
-  maximumAge: 0
-}
-var lat1;
-var lon1;
-function success(pos) {
-	var crd = pos.coords;
-	lat1 = crd.latitude;
-	lon1 = crd.longitude;
-}
-
-function error(er) {
-	lat1 = 40;
-	lon1 = -70;
-	console.log("It helps if you enable location services! Don't worry, nothing sinister will happen.")
-}
-
-navigator.geolocation.getCurrentPosition(success, error, options);
-
-var data;
-var xhttp = new XMLHttpRequest
-xhttp.addEventListener("load", parseMeteorites);
-xhttp.open("GET", "https://data.nasa.gov/resource/y77d-th95.json");
-xhttp.send();
-
-function parseMeteorites() {
-	data = JSON.parse(xhttp.responseText);
-}
-var range
-
-function findMeteorites() {
-	console.log(data);
-
-	range = document.getElementById('select').value;
-
-	removeRow();
-
-	createHead();
-	for (var i = 0; i < data.length; i++) {
-		if(data[i].hasOwnProperty('geolocation')) {
-			lon2 = data[i].geolocation.coordinates[0];
-			lat2 = data[i].geolocation.coordinates[1];
-
-			var R = 3958.7558657440545; // Radius of earth in Miles
-			var dLat = toRad(lat2-lat1);
-			var dLon = toRad(lon2-lon1);
-			var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-				Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
-				Math.sin(dLon/2) * Math.sin(dLon/2);
-			var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-			var d = R * c;
-			var tbody = document.getElementById('tbody');
-
-			if(d < range) {
-				d = Math.floor(d);
-				var date = data[i].year.substring(0,4);
-				console.log("The " + data[i].name + " Meteorite landed " + d + " miles away in " + date);
-
-				tbody.appendChild(createRow(data[i].name,(data[i].mass/1000).toFixed(2),date,d));
-			}
-		}
-	}
-
-}
-function toRad(Value) {
-    /** Converts numeric degrees to radians */
-    return Value * Math.PI / 180;
-}
-
-function createHead() {
-	var tr = document.createElement('tr');
-
-	var th = [  document.createElement('th'),
-				document.createElement('th'),
-				document.createElement('th'),
-				document.createElement('th') ];
-
-	tr.setAttribute('class','tr');
-
-	th[0].innerHTML = 'Name';
-	th[1].innerHTML = 'Mass (kg)';
-	th[2].innerHTML = 'Year';
-	th[3].innerHTML = 'Distance (miles)';
-
-	for (var i = 0; i < th.length; i++) {
-		//thead.appendChild(tr);
-		tr.append(th[i]);
-	}
-	$('#thead').append(tr);
-}
-function createRow(name, mass, year, distance){
-	var tr = document.createElement('tr');
-
-	var td = [  document.createElement('td'),
-				document.createElement('td'),
-				document.createElement('td'),
-				document.createElement('td') ];
-	tr.setAttribute('class','tr');
-
-	td[0].innerHTML = name;
-	td[1].innerHTML = mass;
-	td[2].innerHTML = year;
-	td[3].innerHTML= distance;
-
-	for (var i = 0; i < td.length; i++) {
-		tr.appendChild(td[i]);
-	}
-
-	return tr;
-}
-function removeRow() {
-	//var tr = document.getElementsByClassName('tr');
-	while ($('.tr').length > 0) {
-		table.deleteRow(0);
-	}
-}
-
-//I decided to throw in some jquery, want to get some practice in
-$('#toggleBox').bind("click", animate);
-
-function animate() {
-	if ($('#top').hasClass("thingy noAnimation")) {
-		$('#top').removeClass("noAnimation").addClass("topMoveForward");
-		$('#middle').removeClass("noAnimation").addClass("middleMoveForward");
-		$('#bottom').removeClass("noAnimation").addClass("bottomMoveForward");
-		$('#navSlot1').removeClass("moveNav1Up").addClass("moveNav1Down");
-		$('#navSlot2').removeClass("moveNav2Up").addClass("moveNav2Down");
-
-		$('#nav').removeClass('hidden');
-		$('#nav').addClass('animate');
-	} else {
-		$('#top').removeClass("topMoveForward").addClass("topMoveBack");
-		$('#middle').removeClass("middleMoveForward").addClass("middleMoveBack");
-		$('#bottom').removeClass("bottomMoveForward").addClass("bottomMoveBack");
-		$('#navSlot1').addClass("moveNav1Up").removeClass("moveNav1Down");
-		$('#navSlot2').addClass("moveNav2Up").removeClass("moveNav2Down");
-
-		$('#nav').removeClass('animate');
-		$('#nav').addClass('hideNav');
-
-		setTimeout(function() {
-			$('#top').removeClass('topMoveBack').addClass("thingy noAnimation");
-			$('#middle').removeClass('middleMoveBack').addClass("thingy noAnimation");
-			$('#bottom').removeClass('bottomMoveBack').addClass("thingy noAnimation");
-			$('#nav').removeClass('hideNav');
-			$('#nav').addClass('hidden');
-		},1000);
-	}
-}
 </script>
 </body>
 </html>

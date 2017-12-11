@@ -11,6 +11,7 @@
 	width:40px;
 	z-index:10;
 	transform:translate(0%,-50%);
+	cursor:pointer;
 }
 .thingy {
 	position:absolute;
@@ -162,13 +163,13 @@ a {
 }
 @keyframes moveNav2Down {
 	from { top:0px; }
-	to { top:130px;}
+	to { top:133px;}
 }
 @keyframes moveNav1Up {
 	from { top:70px; }
 	to { top:0px;}
 }
 @keyframes moveNav2Up {
-	from { top:130px; }
+	from { top:133px; }
 	to { top:0px;}
 }

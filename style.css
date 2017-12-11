@@ -314,7 +314,7 @@ body {
   width:100%;
   left:4%;
   background-image:url(images/snow.png);
-  background-size:13%;
+  background-size:6%;
   background-repeat: no-repeat;
   background-position:;
   position:absolute;
@@ -325,7 +325,7 @@ body {
   width:100%;
   left:20%;
   background-image:url(images/snow.png);
-  background-size:20%;
+  background-size:7%;
   background-repeat: no-repeat;
   background-position:;
   position:absolute;
@@ -336,7 +336,7 @@ body {
   width:100%;
   left:55%;
   background-image:url(images/snow.png);
-  background-size:10%;
+  background-size:9%;
   background-repeat: no-repeat;
   background-position:;
   position:absolute;
@@ -352,6 +352,50 @@ body {
   background-position:;
   position:absolute;
   animation:snowfall 5.1s linear infinite;
+}
+.snow .layer5{
+  height:100%;
+  width:100%;
+  left:13%;
+  background-image:url(images/snow.png);
+  background-size:18%;
+  background-repeat: no-repeat;
+  background-position:;
+  position:absolute;
+  animation:snowfall 3.4s linear infinite;
+}
+.snow .layer6{
+  height:100%;
+  width:100%;
+  left:36%;
+  background-image:url(images/snow.png);
+  background-size:15%;
+  background-repeat: no-repeat;
+  background-position:;
+  position:absolute;
+  animation:snowfall 4.3s linear infinite;
+}
+.snow .layer7{
+  height:100%;
+  width:100%;
+  left:53%;
+  background-image:url(images/snow.png);
+  background-size:19%;
+  background-repeat: no-repeat;
+  background-position:;
+  position:absolute;
+  animation:snowfall 4.1s linear infinite;
+}
+.snow .layer8{
+  height:100%;
+  width:100%;
+  left:83%;
+  background-image:url(images/snow.png);
+  background-size:17%;
+  background-repeat: no-repeat;
+  background-position:;
+  position:absolute;
+  animation:snowfall 3.8s linear infinite;
 }
 .snow .layer9, .lightSnow .layer9 {
   height: 100%;

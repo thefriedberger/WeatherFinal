@@ -8,8 +8,7 @@
 <script src="jquery-ui/jquery-ui.min.js" ></script>
 <script src="jquery-ui/external/jquery/jquery.floatThead.min.js" ></script>
 <script>
-$(document).ready(function(){
-
+$(document).ready(function() {
 	var options = {
 	  enableHighAccuracy: true,
 	  timeout: 5000,
@@ -41,6 +40,8 @@ $(document).ready(function(){
 		data = JSON.parse(xhttp.responseText);
 	}
 	var range
+	//when the range is changed, run findMeteorites
+	$('#select').on('change',findMeteorites);
 
 	function findMeteorites() {
 		console.log(data);
@@ -181,7 +182,7 @@ $(document).ready(function(){
 <div class="container">
 	<div class="rangeBox">
 		Find Meteorite landings within
-		<select id="select" onchange="findMeteorites(this.value)">
+			<select id="select">
 			<option value="">Select a range</option>
 			<option value=100>100 Miles</option>
 			<option value=250>250 Miles</option>

@@ -30,14 +30,7 @@ $(document).ready(function() {
 
 	function error(er) {
 		console.log(er);
-		console.log("It helps if you give a location, now I have to make one up");
-
-		// I know this is a terrible way to handle errors, but I feel the most common issue will be people denying location access
-		lat = 40;
-		lon = -70;
-		getLocationWeather(lat, lon);
-		getLocationForecast(lat, lon);
-		getLocationName(lat, lon);
+		console.log("It helps if you give a location, otherwise you can't see the weather!");
 	}
 	navigator.geolocation.getCurrentPosition(success, error, options);
 
@@ -155,7 +148,7 @@ $(document).ready(function() {
 				case "light snow":
 					layer[i].classList.add('lightSnow');
 					break;
-				case "heavy snow":
+				case "snow":
 						layer[i].classList.add('snow');
 						break;
 				case "thunderstorms":
@@ -298,7 +291,7 @@ $(document).ready(function() {
 <div class="frame">
 	<div class="hidden nav" id="nav">
 		<div id="navSlot1"><a href=""><span class="navElement" id="element1">About</span></a></div>
-		<div id="navSlot2"><a href="weather.html"><span class="navElement" id="element2">Meteorites</span></a></div>
+		<div id="navSlot2"><a href="meteorite.html"><span class="navElement" id="element2">Meteorites</span></a></div>
 	</div>
 </div>
 <div class="wrapper">

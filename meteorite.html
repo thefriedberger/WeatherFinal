@@ -161,44 +161,35 @@ function removeRow() {
 	}
 }
 
-
+//I decided to throw in some jquery, want to get some practice in
 $('#toggleBox').bind("click", animate);
 
 function animate() {
-	var topBar = document.getElementById("top");
-	var middleBar = document.getElementById("middle");
-	var bottomBar = document.getElementById("bottom");
-	var nav = document.getElementById('nav');
+	if ($('#top').hasClass("thingy noAnimation")) {
+		$('#top').removeClass("noAnimation").addClass("topMoveForward");
+		$('#middle').removeClass("noAnimation").addClass("middleMoveForward");
+		$('#bottom').removeClass("noAnimation").addClass("bottomMoveForward");
+		$('#navSlot1').removeClass("moveNav1Up").addClass("moveNav1Down");
+		$('#navSlot2').removeClass("moveNav2Up").addClass("moveNav2Down");
 
-	if (topBar.className == "thingy noAnimation") {
-		topBar.classList.add("topMoveForward");
-		middleBar.classList.add("middleMoveForward");
-		bottomBar.classList.add("bottomMoveForward");
-
-		topBar.classList.remove("noAnimation");
-		middleBar.classList.remove("noAnimation");
-		bottomBar.classList.remove("noAnimation");
-
-		nav.classList.remove('hidden');
-		nav.classList.add('animate');
+		$('#nav').removeClass('hidden');
+		$('#nav').addClass('animate');
 	} else {
-		topBar.classList.add("topMoveBack");
-		middleBar.classList.add("middleMoveBack");
-		bottomBar.classList.add("bottomMoveBack");
+		$('#top').removeClass("topMoveForward").addClass("topMoveBack");
+		$('#middle').removeClass("middleMoveForward").addClass("middleMoveBack");
+		$('#bottom').removeClass("bottomMoveForward").addClass("bottomMoveBack");
+		$('#navSlot1').addClass("moveNav1Up").removeClass("moveNav1Down");
+		$('#navSlot2').addClass("moveNav2Up").removeClass("moveNav2Down");
 
-		topBar.classList.remove("topMoveForward");
-		middleBar.classList.remove("middleMoveForward");
-		bottomBar.classList.remove("bottomMoveForward");
-
-		nav.classList.remove('animate');
-		nav.classList.add('hideNav');
+		$('#nav').removeClass('animate');
+		$('#nav').addClass('hideNav');
 
 		setTimeout(function() {
-			topBar.className = "thingy noAnimation";
-			middleBar.className = "thingy noAnimation";
-			bottomBar.className = "thingy noAnimation";
-			nav.classList.remove('hideNav');
-			nav.classList.add('hidden');
+			$('#top').removeClass('topMoveBack').addClass("thingy noAnimation");
+			$('#middle').removeClass('middleMoveBack').addClass("thingy noAnimation");
+			$('#bottom').removeClass('bottomMoveBack').addClass("thingy noAnimation");
+			$('#nav').removeClass('hideNav');
+			$('#nav').addClass('hidden');
 		},1000);
 	}
 }

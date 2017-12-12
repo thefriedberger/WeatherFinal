@@ -1,0 +1,132 @@
+<!doctype html>
+<html>
+<head>
+	<title>About</title>
+<link rel="stylesheet" type="text/css" href="style.css" />
+<link rel="stylesheet" type="text/css" href="navStyle.css" />
+</head>
+<style>
+p {
+	position: absolute;
+	top: 100px;
+	left: 150px ;
+	right: 32px;
+}
+.footer {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 1rem;
+  background-color: #efefef;
+  text-align: center;
+}
+input[type=text], textarea {
+	position: absolute;
+	top: 200px;
+	left: 150px ;
+	right: 50px;
+  width: 80%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-top: 6px;
+  margin-bottom: 16px;
+  resize: vertical
+}
+
+
+input[type=submit] {
+	position: absolute;
+	top: 250px;
+	left: 150px ;
+	right: 50px;
+  background-color: #4CAF50;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+#container {
+	position:absolute;
+	height:auto;
+	width:100%;
+	position: absolute;
+}
+
+input[type=submit]:hover {
+    background-color: #45a049;
+}
+</style>
+<body>
+<span id="topBar">About
+	<div id="toggleBox">
+		<div class="thingy noAnimation" id="top"></div>
+		<div class="thingy noAnimation" id="middle"></div>
+		<div class="thingy noAnimation" id="bottom"></div>
+	</div>
+</span>
+<div class="frame">
+	<div class="hidden nav" id="nav">
+		<a href="Meteorite.html"><span class="navElement" id="element1">Meteorite</span></a>
+		<a href="weather.html"><span class="navElement" id="element2">Weather</span></a>
+	</div>
+</div>
+<div id="container">
+	<p> The developers behind this website were Tyler Friedberg, Charlotte KT, and Ethan Librie. We developed this project to show the different weather in different areas around the world through location tracking. We also added a way to find out meteorites in your area from the last 200 years. We hope you can use this website to get quick weather reports and find out a little history about the area you are in or your own area pertaining to meteorites. </p>
+
+	<label for="qname">3 Questions</label>
+    <input type="text" id="qname" name="questions" placeholder="Have any Questions? Submit them here!">
+	<input type="submit" value="Submit">
+</div>
+
+
+<div class="footer">Contact info. of developers: Ethan Librie: ELDEV@yahoo.com,Charlotte: CKDEV@yahoo.com, Tyler Friedberg: TFDEV@yahoo.com</div>
+	<script>
+
+var theButton = document.getElementById("toggleBox");
+theButton.addEventListener("click", animate);
+
+function animate() {
+	var topBar = document.getElementById("top");
+	var middleBar = document.getElementById("middle");
+	var bottomBar = document.getElementById("bottom");
+	var nav = document.getElementById('nav');
+
+	if (topBar.className == "thingy noAnimation") {
+		topBar.classList.add("topMoveForward");
+		middleBar.classList.add("middleMoveForward");
+		bottomBar.classList.add("bottomMoveForward");
+
+		topBar.classList.remove("noAnimation");
+		middleBar.classList.remove("noAnimation");
+		bottomBar.classList.remove("noAnimation");
+
+		nav.classList.remove('hidden');
+		nav.classList.add('animate');
+	} else {
+		topBar.classList.add("topMoveBack");
+		middleBar.classList.add("middleMoveBack");
+		bottomBar.classList.add("bottomMoveBack");
+
+		topBar.classList.remove("topMoveForward");
+		middleBar.classList.remove("middleMoveForward");
+		bottomBar.classList.remove("bottomMoveForward");
+
+		nav.classList.remove('animate');
+		nav.classList.add('hideNav');
+
+		setTimeout(function() {
+			topBar.className = "thingy noAnimation";
+			middleBar.className = "thingy noAnimation";
+			bottomBar.className = "thingy noAnimation";
+			nav.classList.remove('hideNav');
+			nav.classList.add('hidden');
+		},1500);
+	}
+}</script>
+
+	</body>
+</html>

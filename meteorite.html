@@ -81,6 +81,7 @@ $(document).ready(function() {
 	}
 
 	function createHead() {
+
 		var tr = document.createElement('tr');
 
 		var th = [  document.createElement('th'),
@@ -123,7 +124,7 @@ $(document).ready(function() {
 	}
 	function removeRow() {
 		//var tr = document.getElementsByClassName('tr');
-		while ($('.tr').length > 0) {
+		while ($('.tr').length > 0  || $('.th').length > 0) {
 			table.deleteRow(0);
 		}
 	}
@@ -185,18 +186,21 @@ $(document).ready(function() {
 			<option value=100>100 Miles</option>
 			<option value=250>250 Miles</option>
 			<option value=500>500 Miles</option>
+			<option value=1000>1000 Miles</option>
 		</select>
 	</div>
 	<div class="tableContainer">
 		<table id='table' style='width:100%'>
 			<thead id='thead'>
+				<th class="th">Name</th>
+				<th class="th">Mass (kg)</th>
+				<th class="th">Year</th>
+				<th class="th">Distance (miles)</th>
 			</thead>
 			<tbody id='tbody'>
 			</tbody>
 		</table>
 	</div>
 </div>
-<script>
-</script>
 </body>
 </html>

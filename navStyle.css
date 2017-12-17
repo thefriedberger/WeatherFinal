@@ -144,19 +144,19 @@ a {
 	position: relative;
 }
 .moveNav1Down {
-	animation:moveNav1Down 1s linear forwards;
+	animation:moveNav1Down 1s ease-in-out forwards;
 }
 .moveNav2Down {
-	animation:moveNav2Down 1s linear forwards;
+	animation:moveNav2Down 1s ease-in-out forwards;
 }
 .moveNav1Up {
-	animation:moveNav1Up 1s linear forwards;
+	animation:moveNav1Up 1s ease-in-out forwards;
 }
 .moveNav2Up {
-	animation:moveNav2Up 1s linear forwards;
+	animation:moveNav2Up 1s ease-in-out forwards;
 }
-#element1 {top:10%; }
-#element2 {top:20%; }
+/* #element1 {top:10%; }
+#element2 {top:20%; } */
 @keyframes moveNav1Down {
 	from { top:0px; }
 	to { top:70px;}
